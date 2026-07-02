@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="vic-build" content="v2.0">
+<meta name="vic-build" content="v2.1">
 <title>Vic — Contrate seu seguro por conversa | Você Seguradora</title>
 <meta name="description" content="Converse com a Vic, a assistente da Você Seguradora, e contrate seu seguro residencial em minutos. Simples, seguro e 100% digital.">
 <meta name="theme-color" content="#001a23">
@@ -164,6 +164,8 @@ img{display:block;max-width:100%}
 .chip .pr{color:var(--teal);font-weight:800;font-size:12.5px}
 .chip.on{border-color:var(--neon);background:rgba(70,239,128,.08)}
 .chip.rec{border-color:rgba(70,239,128,.55)}
+.chips.rich{flex-direction:column;align-items:stretch}
+.chips.rich .chip{width:100%;max-width:470px}
 .chip.rec::after{content:"Recomendado";position:absolute;top:-9px;right:12px;font-size:9px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#01230f;background:var(--neon);border-radius:999px;padding:3px 9px;box-shadow:0 4px 10px rgba(70,239,128,.35)}
 .chips .go-btn{align-self:center;background:linear-gradient(135deg,var(--neon),#2fd977);color:#01230f;font-weight:800;border-radius:999px;padding:12px 24px;font-size:14px;box-shadow:0 10px 26px rgba(70,239,128,.3);transition:transform .16s}
 .chips .go-btn:hover{transform:translateY(-2px)}
@@ -202,7 +204,8 @@ img{display:block;max-width:100%}
 .prow b{color:var(--navy);font-weight:700;text-align:right}
 .prow.tot b{color:var(--teal);font-size:16px;font-weight:900}
 .pcard .pa{display:flex;gap:10px;padding:14px 18px 18px}
-.pcard .pa .fbtn{margin:0}
+.pcard .pa .fbtn{margin:0;flex:1.55;font-size:14.5px;padding:14px 10px;white-space:nowrap}
+.pcard .pa .ghost{flex:1}
 .pcard .pa .ghost{background:transparent;border:1.5px solid var(--line2);color:var(--teal);box-shadow:none}
 
 /* boleto mini-doc */
@@ -227,7 +230,12 @@ img{display:block;max-width:100%}
 .inrow .send svg{width:20px;height:20px;color:#01230f}
 
 /* ============ SUCESSO ============ */
-.success{position:relative;z-index:1;min-height:100dvh;display:none;align-items:flex-start;justify-content:center;padding:170px 18px 60px}
+.success{position:relative;z-index:1;min-height:100dvh;display:none;align-items:flex-start;justify-content:center;padding:170px 18px 60px;background:
+  radial-gradient(900px 540px at 88% -8%, rgba(70,239,128,.16), transparent 60%),
+  radial-gradient(760px 520px at -8% 112%, rgba(39,153,137,.20), transparent 55%),
+  linear-gradient(115deg,#03161e 0%,#052733 42%,#0a4b46 78%,#15805a 112%)}
+.success .sc-card{box-shadow:0 34px 90px rgba(0,10,15,.45)}
+.success .sc-card img.vc{filter:drop-shadow(0 22px 44px rgba(0,0,0,.5))}
 .sc-card{position:relative;background:#fff;border:1px solid var(--line);border-radius:26px;padding:34px clamp(20px,4vw,44px);max-width:560px;width:100%;text-align:center;box-shadow:var(--sh);animation:msgIn .4s ease both}
 .sc-card img.vc{height:210px;margin:-150px auto 8px;filter:drop-shadow(0 18px 34px rgba(0,36,48,.22))}
 .sc-h{font-size:clamp(22px,3.4vw,30px);font-weight:900;margin-bottom:8px;color:var(--navy)}
@@ -586,6 +594,7 @@ const ICO=(function(){
 function askChips(opts,onPick,multi){
   clearAsk();
   const box=document.createElement('div'); box.className='chips'; box.id='ask';
+  if(opts.some(o=>o.pr))box.classList.add('rich');
   const sel=new Set();
   opts.forEach(o=>{
     const b=document.createElement('button'); b.className='chip'+(o.rec?' rec':'');
@@ -913,7 +922,7 @@ function confirmar(){
       +'<div class="prow"><span>Assistência</span><b>'+RES.assist.find(a=>a.v===V.assist).n+(V.pet?' + '+RES.pet.find(p=>p.v===V.pet).n:'')+'</b></div>'
       +'<div class="prow"><span>Pagamento</span><b>'+pagoTxt+'</b></div>'
       +'</div>'
-      +'<div style="padding:0 18px 6px"><label style="display:flex;gap:9px;align-items:flex-start;font-size:12px;color:var(--txt2);cursor:pointer;line-height:1.5"><input type="checkbox" id="c-terms" style="margin-top:2px;accent-color:#46EF80"> Li e concordo com os <b style="color:var(--navy)">Termos e Condições</b> do seguro e autorizo o tratamento dos meus dados conforme a <b style="color:var(--navy)">LGPD</b>.</label></div>'
+      +'<div style="padding:0 18px 6px"><label style="display:flex;gap:10px;align-items:flex-start;font-size:12px;color:var(--txt2);cursor:pointer;line-height:1.55"><input type="checkbox" id="c-terms" style="margin-top:2px;flex-shrink:0;width:16px;height:16px;accent-color:#46EF80"><span>Li e concordo com os <b style="color:var(--navy)">Termos e Condições</b> do seguro e autorizo o tratamento dos meus dados conforme a <b style="color:var(--navy)">LGPD</b>.</span></label></div>'
       +'<div class="pa"><button class="fbtn" id="c-go">Ir para o pagamento 🔒</button><button class="fbtn ghost" id="c-adj">Ajustar</button></div>';
     stream().appendChild(d); scrollEnd();
     d.querySelector('#c-adj').onclick=()=>{ clearAsk(); meSay('Quero ajustar'); resumo(); };
@@ -1019,7 +1028,7 @@ function payBoleto(){
   function g(n){let o='';for(let i=0;i<n;i++)o+=Math.floor(Math.random()*10);return o;}
   const linha='23793.'+g(5)+' '+g(5)+'.'+g(6)+' '+g(5)+'.'+g(6)+' '+g(1)+' 9'+g(3)+('0000000000'+Math.round(valor*100)).slice(-10);
   let bars=''; let s=42; for(let k=0;k<64;k++){ s=(s*1103515245+12345)>>>0; bars+='<span style="display:inline-block;width:'+(1+(s%3))+'px;height:38px;background:'+(((s>>5)&1)?'#06121a':'#fff')+'"></span>'; }
-  vicSay('Boleto emitido! 🧾 Você pode pagar <b>até o vencimento</b> — e a sua cobertura começa assim que o pagamento for confirmado.',()=>{
+  vicSay('Boleto emitido! 🧾 Você pode pagar em <b>qualquer banco ou app</b>, até o vencimento.<br><br>Um combinado importante: 🤝 <b>assim que fizer o pagamento, volte aqui e toque em "Concluir contratação ✓"</b> pra eu registrar a sua proposta. E fica tranquilo(a): boleto tem <b>compensação bancária de até 3 dias úteis</b> — a sua cobertura começa automaticamente quando o pagamento for confirmado, e você acompanha tudo pela <b>área do cliente</b>. 💚',()=>{
     clearAsk();
     const d=document.createElement('div'); d.className='fcard'; d.id='ask';
     d.innerHTML='<div class="fh"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 8v8M11 8v8M14 8v8M17 8v8" stroke-width="1.6"/></svg></span><div><b>Boleto — '+fmt(valor)+(V.parcelas>1?' (1ª de '+V.parcelas+'x)':'')+'</b><span>Vencimento: '+vencStr+' · também enviamos por e-mail</span></div></div>'
@@ -1030,7 +1039,7 @@ function payBoleto(){
       +'<div class="bars">'+bars+'</div><div class="code">'+linha+'</div></div>'
       +'<button class="fbtn ghost" id="bl-copy" style="background:transparent;border:1.5px solid var(--line2);color:var(--teal);box-shadow:none;margin-bottom:8px">Copiar linha digitável</button>'
       +'<button class="fbtn" id="bl-done">Concluir contratação ✓</button>'
-      +'<div class="fnote"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8-7 9-4-1-7-4.5-7-9V6z"/></svg>Cobertura inicia após a confirmação do pagamento da 1ª parcela.</div>';
+      +'<div class="fnote"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8-7 9-4-1-7-4.5-7-9V6z"/></svg>Cobertura inicia após a confirmação do pagamento da 1ª parcela · compensação do boleto em até 3 dias úteis.</div>';
     stream().appendChild(d); scrollEnd();
     d.querySelector('#bl-copy').onclick=()=>{ try{navigator.clipboard.writeText(linha);}catch(e){} const b=d.querySelector('#bl-copy'); b.textContent='Linha copiada ✓'; setTimeout(()=>{ b.textContent='Copiar linha digitável'; },1600); };
     d.querySelector('#bl-done').onclick=()=>{ clearAsk(); meSay('Concluir contratação'); V.paid=false; pagoOk(); };
