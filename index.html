@@ -1,0 +1,954 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="vic-build" content="v1.1">
+<title>Vic — Contrate seu seguro por conversa | Você Seguradora</title>
+<meta name="description" content="Converse com a Vic, a assistente da Você Seguradora, e contrate seu seguro residencial em minutos. Simples, seguro e 100% digital.">
+<meta name="theme-color" content="#001a23">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{
+  --navy:#002430; --deep:#001a23; --deep2:#02222d; --panel:#04303c; --panel2:#053743;
+  --neon:#46EF80; --teal:#279989; --mint:rgba(70,239,128,.12);
+  --txt:#eef7f4; --txt2:#a7c2c4; --txt3:#6f9298;
+  --line:rgba(255,255,255,.09); --line2:rgba(70,239,128,.28);
+  --r:16px; --sh:0 18px 50px rgba(0,0,0,.35);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{font-family:'Poppins',system-ui,-apple-system,sans-serif;background:var(--deep);color:var(--txt);min-height:100dvh;overflow-x:hidden}
+button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
+input,select{font:inherit}
+img{display:block;max-width:100%}
+:focus-visible{outline:3px solid rgba(70,239,128,.6);outline-offset:2px;border-radius:8px}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;transition-duration:.001ms!important}}
+
+/* ============ FUNDO ============ */
+.bg{position:fixed;inset:0;z-index:0;background:
+  radial-gradient(1100px 620px at 82% -10%, rgba(39,153,137,.28), transparent 60%),
+  radial-gradient(900px 600px at -12% 108%, rgba(70,239,128,.10), transparent 55%),
+  linear-gradient(160deg,#01202b 0%,#001a23 55%,#012a30 100%)}
+.bg::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.045) 1px,transparent 1px);background-size:26px 26px;mask-image:radial-gradient(800px 500px at 50% 0%,#000 30%,transparent 75%)}
+.bg .vmark{position:absolute;right:-140px;bottom:-160px;width:560px;height:560px;opacity:.05;transform:rotate(12deg)}
+
+/* ============ TELA 1 — BOAS-VINDAS ============ */
+.welcome{position:relative;z-index:1;min-height:100dvh;display:flex;flex-direction:column}
+.w-top{display:flex;align-items:center;justify-content:space-between;padding:22px clamp(18px,4vw,44px)}
+.brand{display:flex;align-items:center;gap:11px;text-decoration:none;color:#fff}
+.brand .mk{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,var(--teal),#0a4b46);display:flex;align-items:center;justify-content:center;box-shadow:0 8px 20px rgba(39,153,137,.35)}
+.brand .mk svg{width:22px;height:22px}
+.brand b{font-weight:900;letter-spacing:.04em;font-size:15px;line-height:1.05}
+.brand b span{color:var(--neon)}
+.w-links{display:flex;gap:10px}
+.w-links a{color:var(--txt2);text-decoration:none;font-size:13px;font-weight:600;padding:9px 14px;border-radius:999px;border:1px solid var(--line);transition:all .18s}
+.w-links a:hover{color:#fff;border-color:var(--line2)}
+.w-hero{flex:1;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:30px;align-items:center;max-width:1180px;margin:0 auto;padding:10px clamp(18px,4vw,44px) 60px;width:100%}
+.wh-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--neon);background:var(--mint);border:1px solid var(--line2);border-radius:999px;padding:8px 16px;margin-bottom:20px}
+.wh-eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--neon);animation:vpulse 1.6s infinite}
+@keyframes vpulse{0%{box-shadow:0 0 0 0 rgba(70,239,128,.5)}70%{box-shadow:0 0 0 8px rgba(70,239,128,0)}100%{box-shadow:0 0 0 0 rgba(70,239,128,0)}}
+.wh-h1{font-size:clamp(30px,4.6vw,52px);font-weight:900;line-height:1.06;letter-spacing:-.02em;margin-bottom:16px}
+.wh-h1 em{font-style:normal;color:var(--neon)}
+.wh-sub{font-size:clamp(15px,1.8vw,18px);color:var(--txt2);line-height:1.65;max-width:520px;margin-bottom:28px}
+.wh-card{background:rgba(255,255,255,.035);border:1px solid var(--line);border-radius:22px;padding:24px;backdrop-filter:blur(8px);box-shadow:var(--sh)}
+.wh-card-h{font-size:17px;font-weight:800;margin-bottom:4px;text-align:center}
+.wh-card-s{font-size:13.5px;color:var(--txt2);text-align:center;margin-bottom:18px}
+.seg-grid{display:grid;grid-template-columns:1fr;gap:12px}
+.segc{position:relative;display:flex;align-items:center;gap:15px;text-align:left;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:16px;padding:16px 18px;transition:border-color .18s,transform .18s,background .18s}
+.segc:hover:not(.off){border-color:var(--line2);background:rgba(70,239,128,.05);transform:translateY(-2px)}
+.segc .ic{width:46px;height:46px;border-radius:13px;background:linear-gradient(135deg,rgba(70,239,128,.18),rgba(39,153,137,.18));border:1px solid var(--line2);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.segc .ic svg{width:24px;height:24px;color:var(--neon)}
+.segc .tx b{display:block;font-size:15.5px;font-weight:800}
+.segc .tx span{font-size:12.5px;color:var(--txt2)}
+.segc .go{margin-left:auto;display:flex;align-items:center;gap:6px;color:var(--neon);font-size:13px;font-weight:800;flex-shrink:0}
+.segc .go svg{width:16px;height:16px;transition:transform .18s}
+.segc:hover:not(.off) .go svg{transform:translateX(3px)}
+.segc.off{opacity:.55;cursor:default}
+.segc .soon{margin-left:auto;font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--txt2);border:1px solid var(--line);border-radius:999px;padding:5px 10px;flex-shrink:0}
+.wh-trust{display:flex;flex-wrap:wrap;gap:6px 18px;justify-content:center;margin-top:16px;font-size:12.5px;color:var(--txt2)}
+.wh-trust span{display:inline-flex;align-items:center;gap:6px}
+.wh-trust svg{width:14px;height:14px;color:var(--neon)}
+.w-vic{position:relative;display:flex;align-items:flex-end;justify-content:center;min-height:420px}
+.w-vic img{height:min(66vh,600px);filter:drop-shadow(0 30px 60px rgba(0,0,0,.45));animation:vfloat 5s ease-in-out infinite}
+@keyframes vfloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.w-vic .halo{position:absolute;bottom:-40px;left:50%;transform:translateX(-50%);width:420px;height:120px;background:radial-gradient(closest-side,rgba(70,239,128,.22),transparent);filter:blur(8px)}
+.vic-tag{position:absolute;top:12%;right:4%;background:rgba(2,34,45,.9);border:1px solid var(--line2);border-radius:16px;padding:12px 16px;backdrop-filter:blur(6px);box-shadow:var(--sh);animation:tagIn .7s .45s both}
+@keyframes tagIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.vic-tag b{display:block;font-size:14px}
+.vic-tag span{font-size:11.5px;color:var(--txt2)}
+.w-feats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;max-width:1180px;margin:0 auto;width:100%;padding:0 clamp(18px,4vw,44px) 46px}
+.wf{background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:16px;padding:18px;text-align:center}
+.wf svg{width:22px;height:22px;color:var(--neon);margin:0 auto 8px}
+.wf b{display:block;font-size:13.5px;font-weight:800}
+.wf span{font-size:12px;color:var(--txt2)}
+@media(max-width:960px){
+  .w-hero{grid-template-columns:1fr;padding-bottom:20px}
+  .w-vic{order:-1;min-height:0;margin-top:-8px}
+  .w-vic img{height:min(34vh,280px)}
+  .vic-tag{display:none}
+  .w-feats{grid-template-columns:1fr;padding-bottom:30px}
+}
+
+/* ============ TELA 2 — CHAT ============ */
+.chat{position:relative;z-index:1;min-height:100dvh;display:none;flex-direction:column;max-width:860px;margin:0 auto;width:100%}
+.c-head{position:sticky;top:0;z-index:30;background:rgba(0,26,35,.88);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding:14px clamp(14px,3vw,26px) 10px}
+.ch-row{display:flex;align-items:center;gap:12px}
+.ch-av{position:relative;width:46px;height:46px;border-radius:50%;overflow:hidden;border:2px solid var(--line2);flex-shrink:0;background:#0a3a40}
+.ch-av img{width:100%;height:100%;object-fit:cover}
+.ch-av::after{content:"";position:absolute;right:1px;bottom:1px;width:11px;height:11px;border-radius:50%;background:var(--neon);border:2px solid var(--deep)}
+.ch-id b{display:flex;align-items:center;gap:6px;font-size:16px;font-weight:800}
+.ch-id b svg{width:15px;height:15px;color:var(--neon)}
+.ch-id span{font-size:12px;color:var(--txt2);display:flex;align-items:center;gap:5px}
+.ch-id span i{width:6px;height:6px;border-radius:50%;background:var(--neon);animation:vpulse 1.6s infinite}
+.ch-exit{margin-left:auto;color:var(--txt2);font-size:12.5px;font-weight:700;border:1px solid var(--line);border-radius:999px;padding:8px 14px;transition:all .18s}
+.ch-exit:hover{color:#fff;border-color:var(--line2)}
+.steps{display:flex;align-items:center;margin-top:13px;gap:4px}
+.stp{display:flex;flex-direction:column;align-items:center;gap:5px;flex-shrink:0;width:64px}
+.stp .n{width:26px;height:26px;border-radius:50%;border:2px solid rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:var(--txt3);transition:all .3s;background:var(--deep)}
+.stp .l{font-size:10px;font-weight:700;color:var(--txt3);letter-spacing:.02em;transition:color .3s}
+.stp.cur .n{border-color:var(--neon);color:var(--neon);box-shadow:0 0 0 4px rgba(70,239,128,.14)}
+.stp.cur .l{color:#fff}
+.stp.done .n{border-color:var(--neon);background:var(--neon);color:#01230f}
+.stp.done .l{color:var(--txt2)}
+.sbar{flex:1;height:2px;background:rgba(255,255,255,.12);border-radius:2px;overflow:hidden;margin-bottom:15px}
+.sbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--teal),var(--neon));transition:width .5s ease}
+.sbar.done i{width:100%}
+
+.c-stream{flex:1;padding:22px clamp(14px,3vw,26px) 150px;display:flex;flex-direction:column;gap:14px}
+.msg{display:flex;gap:10px;max-width:86%;animation:msgIn .3s ease both}
+@keyframes msgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.msg .mav{width:34px;height:34px;border-radius:50%;overflow:hidden;flex-shrink:0;border:1.5px solid var(--line2);margin-top:2px;background:#0a3a40}
+.msg .mav img{width:100%;height:100%;object-fit:cover}
+.mb{background:var(--panel);border:1px solid var(--line);border-radius:4px 18px 18px 18px;padding:13px 16px;font-size:14.5px;line-height:1.65;color:var(--txt);position:relative}
+.mb b{color:#fff}
+.mb .tim{display:block;font-size:10px;color:var(--txt3);text-align:right;margin-top:6px}
+.msg.me{align-self:flex-end;flex-direction:row-reverse}
+.msg.me .mb{background:linear-gradient(135deg,rgba(70,239,128,.16),rgba(39,153,137,.14));border-color:var(--line2);border-radius:18px 4px 18px 18px}
+.typing{display:inline-flex;gap:5px;padding:4px 2px}
+.typing i{width:7px;height:7px;border-radius:50%;background:var(--txt3);animation:tblink 1.1s infinite}
+.typing i:nth-child(2){animation-delay:.18s}.typing i:nth-child(3){animation-delay:.36s}
+@keyframes tblink{0%,60%,100%{opacity:.25;transform:translateY(0)}30%{opacity:1;transform:translateY(-3px)}}
+
+/* chips */
+.chips{display:flex;flex-wrap:wrap;gap:10px;padding-left:44px;animation:msgIn .3s ease both}
+.chip{display:flex;flex-direction:column;align-items:flex-start;gap:2px;background:rgba(255,255,255,.035);border:1.5px solid var(--line);border-radius:14px;padding:12px 16px;text-align:left;transition:all .16s;min-width:130px}
+.chip:hover{border-color:var(--neon);background:rgba(70,239,128,.07);transform:translateY(-2px)}
+.chip b{font-size:14px;font-weight:700}
+.chip span{font-size:11.5px;color:var(--txt2)}
+.chip .pr{color:var(--neon);font-weight:800;font-size:12.5px}
+.chip.on{border-color:var(--neon);background:rgba(70,239,128,.10)}
+.chip.rec::after{content:"Recomendado";font-size:9px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#01230f;background:var(--neon);border-radius:999px;padding:3px 8px;margin-top:5px}
+.chips .go-btn{align-self:center;background:linear-gradient(135deg,var(--neon),#2fd977);color:#01230f;font-weight:800;border-radius:999px;padding:12px 24px;font-size:14px;box-shadow:0 10px 26px rgba(70,239,128,.3);transition:transform .16s}
+.chips .go-btn:hover{transform:translateY(-2px)}
+
+/* cards de formulário no chat */
+.fcard{margin-left:44px;background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--line2);border-radius:20px;padding:20px;max-width:430px;box-shadow:var(--sh);animation:msgIn .35s ease both}
+.fcard .fh{display:flex;align-items:center;gap:11px;margin-bottom:14px}
+.fcard .fh .ic{width:38px;height:38px;border-radius:11px;background:var(--mint);border:1px solid var(--line2);display:flex;align-items:center;justify-content:center}
+.fcard .fh .ic svg{width:19px;height:19px;color:var(--neon)}
+.fcard .fh b{font-size:15px;font-weight:800;display:block}
+.fcard .fh span{font-size:11.5px;color:var(--txt2)}
+.ff{margin-bottom:12px}
+.ff label{display:block;font-size:10.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--neon);margin-bottom:6px}
+.ff input,.ff select{width:100%;background:rgba(0,0,0,.25);border:1.5px solid var(--line);border-radius:12px;padding:13px 14px;color:#fff;font-size:14.5px;transition:border-color .15s}
+.ff input::placeholder{color:var(--txt3)}
+.ff input:focus,.ff select:focus{outline:none;border-color:var(--neon)}
+.ff .hint{display:flex;gap:7px;font-size:11px;color:var(--txt2);background:var(--mint);border:1px solid var(--line2);border-radius:10px;padding:8px 10px;margin-top:7px;line-height:1.5}
+.ff.err input{border-color:#ff6b81}
+.ff .fer{display:none;font-size:11px;color:#ff8a9a;font-weight:600;margin-top:5px}
+.ff.err .fer{display:block}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.fbtn{width:100%;background:linear-gradient(135deg,var(--neon),#2fd977);color:#01230f;font-weight:800;font-size:15px;border-radius:14px;padding:14px;margin-top:4px;box-shadow:0 12px 28px rgba(70,239,128,.28);transition:transform .16s,box-shadow .16s}
+.fbtn:hover{transform:translateY(-2px)}
+.fnote{display:flex;align-items:center;justify-content:center;gap:6px;font-size:11px;color:var(--txt2);margin-top:10px}
+.fnote svg{width:13px;height:13px;color:var(--neon)}
+
+/* cartão de preço / resumo */
+.pcard{margin-left:44px;background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--line2);border-radius:20px;overflow:hidden;max-width:430px;box-shadow:var(--sh);animation:msgIn .35s ease both}
+.pcard .pt{background:linear-gradient(135deg,rgba(70,239,128,.16),rgba(39,153,137,.14));padding:18px;text-align:center;border-bottom:1px solid var(--line)}
+.pcard .pt .lb{font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--txt2)}
+.pcard .pt .vl{font-size:34px;font-weight:900;color:var(--neon);line-height:1.15}
+.pcard .pt .vl small{font-size:14px;color:var(--txt2);font-weight:600}
+.pcard .rows{padding:8px 18px}
+.prow{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);font-size:13px;color:var(--txt2)}
+.prow:last-child{border-bottom:none}
+.prow b{color:#fff;font-weight:700;text-align:right}
+.prow.tot b{color:var(--neon);font-size:16px;font-weight:900}
+.pcard .pa{display:flex;gap:10px;padding:14px 18px 18px}
+.pcard .pa .fbtn{margin:0}
+.pcard .pa .ghost{background:transparent;border:1.5px solid var(--line2);color:var(--neon);box-shadow:none}
+
+/* boleto mini-doc */
+.bol{margin:0 18px 14px;background:#fff;border-radius:14px;padding:14px;color:#002430}
+.bol .bh{display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #002430;padding-bottom:7px;margin-bottom:9px;font-weight:900;font-size:13.5px}
+.bol .br{display:flex;justify-content:space-between;font-size:11.5px;color:#5b6b70;margin-bottom:3px}
+.bol .br b{color:#002430}
+.bol .code{font-family:monospace;font-size:11px;text-align:center;word-break:break-all;color:#002430;margin-top:6px}
+.bars{display:flex;gap:1px;align-items:flex-end;justify-content:center;padding:7px 0 2px;overflow:hidden}
+
+/* ações rápidas + input */
+.c-foot{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:860px;z-index:25;background:linear-gradient(180deg,transparent,rgba(0,26,35,.92) 26%);padding:26px clamp(14px,3vw,26px) 16px}
+.qacts{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+.qa{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--neon);border:1px solid var(--line2);border-radius:999px;padding:8px 14px;background:rgba(0,26,35,.7);transition:all .16s}
+.qa:hover{background:var(--mint)}
+.qa svg{width:13px;height:13px}
+.inrow{display:flex;gap:10px;align-items:center}
+.inrow input{flex:1;background:rgba(255,255,255,.05);border:1.5px solid var(--line);border-radius:999px;padding:15px 20px;color:#fff;font-size:14.5px}
+.inrow input:focus{outline:none;border-color:var(--line2)}
+.inrow .send{width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,var(--neon),#2fd977);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 10px 24px rgba(70,239,128,.3);transition:transform .16s}
+.inrow .send:hover{transform:scale(1.06)}
+.inrow .send svg{width:20px;height:20px;color:#01230f}
+
+/* ============ SUCESSO ============ */
+.success{position:relative;z-index:1;min-height:100dvh;display:none;align-items:center;justify-content:center;padding:40px 18px}
+.sc-card{position:relative;background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--line2);border-radius:26px;padding:34px clamp(20px,4vw,44px);max-width:560px;width:100%;text-align:center;box-shadow:var(--sh);animation:msgIn .4s ease both}
+.sc-card img.vc{height:200px;margin:-130px auto 6px;filter:drop-shadow(0 20px 40px rgba(0,0,0,.4))}
+.sc-h{font-size:clamp(22px,3.4vw,30px);font-weight:900;margin-bottom:8px}
+.sc-h em{font-style:normal;color:var(--neon)}
+.sc-s{font-size:14px;color:var(--txt2);line-height:1.6;margin-bottom:16px}
+.sc-num{display:inline-block;background:var(--mint);border:1px solid var(--line2);border-radius:999px;padding:9px 20px;font-size:13px;margin-bottom:18px}
+.sc-num b{color:var(--neon)}
+.sc-rows{background:rgba(0,0,0,.18);border:1px solid var(--line);border-radius:16px;margin-bottom:18px;text-align:left}
+.sc-rows .prow{padding:11px 16px}
+.sc-btns{display:flex;flex-direction:column;gap:10px}
+.sc-btns .fbtn{margin:0}
+.sc-btns .ghost{background:transparent;border:1.5px solid var(--line2);color:var(--neon);box-shadow:none}
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:50}
+.cf{position:absolute;width:9px;height:14px;top:-20px;animation:cfall linear forwards}
+@keyframes cfall{to{transform:translateY(110vh) rotate(720deg);opacity:.2}}
+@media(max-width:640px){
+  .msg{max-width:94%}
+  .fcard,.pcard{margin-left:0;max-width:100%}
+  .chips{padding-left:0}
+  .stp{width:52px}
+  .stp .l{font-size:9px}
+}
+</style>
+</head>
+<body>
+<div class="bg"><svg class="vmark" viewBox="0 0 24 24" fill="none"><path d="M4 4l7 16h2L20 4h-3.5L12 15.5 7.5 4z" fill="#46EF80"/></svg></div>
+
+<!-- ============ TELA 1: BOAS-VINDAS ============ -->
+<section class="welcome" id="welcome">
+  <div class="w-top">
+    <a class="brand" href="https://voce-seguradora-site.netlify.app/" aria-label="Você Seguradora">
+      <span class="mk"><svg viewBox="0 0 24 24" fill="none"><path d="M4 4l7 16h2L20 4h-3.5L12 15.5 7.5 4z" fill="#fff"/></svg></span>
+      <b>VOCÊ<br><span>SEGURADORA</span></b>
+    </a>
+    <nav class="w-links">
+      <a href="https://voce-seguradora-site.netlify.app/" rel="noopener">Ir para o site</a>
+      <a href="https://wa.me/5511930549424" target="_blank" rel="noopener">Falar com humano</a>
+    </nav>
+  </div>
+  <div class="w-hero">
+    <div>
+      <span class="wh-eyebrow"><span class="dot"></span>Vic · Assistente virtual online</span>
+      <h1 class="wh-h1">Contrate seu seguro <em>conversando</em> com a Vic</h1>
+      <p class="wh-sub">Sem formulários intermináveis. A Vic te guia por uma conversa rápida, tira suas dúvidas na hora e você contrata em minutos — 100% digital e seguro.</p>
+      <div class="wh-card">
+        <div class="wh-card-h">Para começar, me conta:</div>
+        <div class="wh-card-s">Qual seguro você gostaria de contratar?</div>
+        <div class="seg-grid">
+          <button class="segc" id="go-res">
+            <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M9 20v-6h6v6"/></svg></span>
+            <span class="tx"><b>Seguro Residencial</b><span>Proteção completa para sua casa</span></span>
+            <span class="go">Conversar<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+          </button>
+          <button class="segc off" aria-disabled="true">
+            <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-4.5-9.5-9A5 5 0 0112 5a5 5 0 019.5 7c-2.5 4.5-9.5 9-9.5 9z"/></svg></span>
+            <span class="tx"><b>Vida e AP Individual</b><span>Vida e acidentes pessoais</span></span>
+            <span class="soon">Em breve</span>
+          </button>
+          <button class="segc off" aria-disabled="true">
+            <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 16l1.4-5.2A2 2 0 018.3 9.3h7.4a2 2 0 011.9 1.5L19 16M4 16h16v3h-3v-1.5H7V19H4z"/><circle cx="7.5" cy="16" r="1.4"/><circle cx="16.5" cy="16" r="1.4"/></svg></span>
+            <span class="tx"><b>Seguro Franquia Auto</b><span>Proteção complementar do seu carro</span></span>
+            <span class="soon">Em breve</span>
+          </button>
+        </div>
+        <div class="wh-trust">
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l4 4 10-10"/></svg>Rápido e seguro</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l4 4 10-10"/></svg>Sem compromisso</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l4 4 10-10"/></svg>Dados protegidos (LGPD)</span>
+        </div>
+      </div>
+    </div>
+    <div class="w-vic">
+      <div class="halo"></div>
+      <img src="vic-hero.png" alt="Vic, assistente virtual da Você Seguradora, acenando" fetchpriority="high">
+      <div class="vic-tag"><b>Oi, eu sou a Vic! 👋</b><span>Vou te ajudar do início ao fim.</span></div>
+    </div>
+  </div>
+  <div class="w-feats">
+    <div class="wf"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h6l-1 8 9-12h-6z"/></svg><b>Cotação em minutos</b><span>Conversa rápida, preço na hora</span></div>
+    <div class="wf"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8-7 9-4-1-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg><b>100% seguro</b><span>Dados criptografados · LGPD</span></div>
+    <div class="wf"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="0.5" fill="currentColor"/></svg><b>Preço transparente</b><span>IOF detalhado antes de confirmar</span></div>
+  </div>
+</section>
+
+<!-- ============ TELA 2: CHAT ============ -->
+<section class="chat" id="chat" aria-live="polite">
+  <header class="c-head">
+    <div class="ch-row">
+      <span class="ch-av"><img src="vic-avatar.png" alt=""></span>
+      <div class="ch-id">
+        <b>Vic <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8-7 9-4-1-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg></b>
+        <span><i></i>Assistente verificada · Conversa protegida</span>
+      </div>
+      <button class="ch-exit" id="chat-exit">Sair</button>
+    </div>
+    <div class="steps" id="steps"></div>
+  </header>
+  <main class="c-stream" id="stream"></main>
+  <div class="c-foot">
+    <div class="qacts">
+      <button class="qa" data-q="seguro"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>É seguro?</button>
+      <button class="qa" data-q="humano"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3.1 19.5 19.5 0 01-6-6A19.8 19.8 0 012.1 4.2 2 2 0 014.1 2h3a2 2 0 012 1.7c.1 1 .4 2 .7 2.9a2 2 0 01-.5 2.1L8 10a16 16 0 006 6l1.3-1.3a2 2 0 012.1-.5c.9.3 1.9.6 2.9.7a2 2 0 011.7 2z"/></svg>Falar com atendente</button>
+    </div>
+    <div class="inrow">
+      <input id="chat-in" placeholder="Digite sua pergunta…" autocomplete="off" aria-label="Digite sua pergunta para a Vic">
+      <button class="send" id="chat-send" aria-label="Enviar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/></svg></button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TELA 3: SUCESSO ============ -->
+<section class="success" id="success">
+  <div class="sc-card">
+    <img class="vc" src="vic-cheer.png" alt="Vic comemorando">
+    <h2 class="sc-h">Proposta enviada com <em>sucesso!</em> 🎉</h2>
+    <p class="sc-s" id="sc-sub">Recebemos os seus dados. Sua proposta de Seguro Residencial está em análise — você vai receber a apólice e as Condições Gerais por e-mail.</p>
+    <div class="sc-num">Proposta nº <b id="sc-num">—</b></div>
+    <div class="sc-rows" id="sc-rows"></div>
+    <div class="sc-btns">
+      <a class="fbtn" style="display:block;text-decoration:none;text-align:center" href="https://voce-seguradora-site.netlify.app/" rel="noopener">Acompanhar na área do cliente</a>
+      <a class="fbtn ghost" style="display:block;text-decoration:none;text-align:center" href="https://wa.me/5511930549424" target="_blank" rel="noopener">Falar com o nosso time</a>
+      <button class="fbtn ghost" id="sc-again">Fazer outra cotação</button>
+    </div>
+  </div>
+</section>
+<div class="confetti" id="confetti"></div>
+
+<script>
+/* =====================================================================
+   VIC CHAT — Contratação por conversa · Você Seguradora
+   Motor de decisão IDÊNTICO ao site/app (Seguro Residencial).
+===================================================================== */
+'use strict';
+
+/* ---------- Supabase (mesmo projeto do site e do app) ---------- */
+const SUPABASE_URL='https://fqmsylspnjxtwikfmqtz.supabase.co';
+const SUPABASE_KEY='sb_publishable_Md3S1XNW459hNYWuUgtwqQ_KBsWZ6k4';
+let SB=null; try{ if(window.supabase&&window.supabase.createClient){ SB=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:false}}); } }catch(e){}
+
+/* ---------- Motor de decisão (regras do produto — iguais ao site) ---------- */
+const IOF_RATE=0.0738;
+const RES={
+  lmi:{min:50000,max:1000000,step:10000,default:100000},
+  vig:36, vigFator:0.95,
+  tiposImovel:[
+    {v:'apto',n:'Apartamento',s:'Uso habitual'},
+    {v:'apto_cond',n:'Apartamento em condomínio',s:'Condomínio fechado'},
+    {v:'casa',n:'Casa',s:'Uso habitual'},
+    {v:'casa_cond',n:'Casa em condomínio',s:'Condomínio fechado'}],
+  ocupacoes:[{v:'habitual',n:'Habitual',s:'Residência fixa'},{v:'veraneio',n:'Veraneio',s:'Uso em temporadas'}],
+  perfis:[
+    {v:'prop_morador',n:'Proprietário morador',s:'Imóvel próprio onde moro'},
+    {v:'prop_locador',n:'Proprietário locador',s:'Imóvel meu, alugado a terceiros'},
+    {v:'inquilino',n:'Inquilino',s:'Moro de aluguel'}],
+  eleg:[
+    {k:'compart',q:'O imóvel é usado como <b>moradia coletiva</b> ou dividido entre pessoas sem vínculo familiar?',s:'Ex.: pensão, alojamento, pousada, co-living, república ou troca frequente de ocupantes.'},
+    {k:'construcao',q:'A construção é <b>palafita, flutuante</b> ou tem mais de <b>25% em madeira</b>?',s:'Considere a estrutura principal — não os acabamentos ou móveis.'},
+    {k:'rural',q:'O imóvel fica em <b>zona rural</b> ou é isolado, sem acesso regular?',s:'Vale para imóveis sem acesso regular por via pública.'}],
+  basicaTxa:0.0025,
+  txas:{2:0.0008,3:0.0007,4:0.0009,5:0.0006,6:0.0003,7:0.0005,8:0.0004,9:0.0010,10:0.0004,11:0.0004,12:0.0003,14:0.0002,15:0.0002,18:0.0006},
+  solarCoef:1.05, sinistroCoef:1.10,
+  protecoes:['Grades e portões','Alarme','Monitoramento','CFTV','Portaria 24h','Controle de acesso','Fechadura digital','Vigilância'],
+  franquias:[
+    {v:'isenta',n:'Isenta',s:'Sem participação no sinistro',fator:1.10},
+    {v:'reduzida',n:'Reduzida',s:'50% da franquia padrão',fator:1.05},
+    {v:'padrao',n:'Padrão',s:'Franquia base do produto',fator:1.00,rec:true},
+    {v:'agravada',n:'Agravada',s:'150% da padrão (mais barato)',fator:0.95}],
+  assist:[
+    {v:'essencial',n:'Essencial',preco:9.90,s:'Chaveiro, encanador, eletricista, desentupimento, vidraceiro e help desk'},
+    {v:'protecao',n:'Proteção',preco:16.90,s:'Tudo do Essencial + linha branca/marrom, luminárias, olho mágico e mais'},
+    {v:'conforto',n:'Conforto+',preco:24.90,s:'Tudo do Proteção + ar-condicionado, caçamba, suporte de TV e mais',rec:true}],
+  pet:[
+    {v:'',n:'Sem assistência pet',preco:0,s:'Você pode adicionar depois'},
+    {v:'pet_sossego',n:'Pet Sossego',preco:12.90,s:'Telemedicina, urgência, transporte, funeral e hospedagem'},
+    {v:'pet_conforto',n:'Pet Conforto',preco:19.90,s:'Tudo do Sossego + consulta eletiva, concierge, vacinas e exames'},
+    {v:'pet_total',n:'Pet Total',preco:29.90,s:'Tudo do Conforto + exames de imagem'}]
+};
+const PACOTES=[
+  {v:'basico',n:'Essencial',cobs:[2,3,4,5],s:'Incêndio, vendaval, danos elétricos, alagamento e tubulações'},
+  {v:'intermediario',n:'Intermediário',cobs:[2,3,4,5,9,11],s:'Tudo do Essencial + roubo com arrombamento e RC Familiar',rec:true},
+  {v:'completo',n:'Ampliada',cobs:[2,3,4,5,6,7,8,9,10,11,12,14,15,18],s:'Tudo do Intermediário + vidros, bicicletas, danos morais e mais'}];
+
+/* Estado da conversa */
+let V={};
+function resetV(){ V={tipo:null,ocup:null,perfil:null,cep:'',addr:null,eleg:{},elegIdx:0,quest:{solar:false,sin:false,prot:[]},lmi:RES.lmi.default,pacote:null,assist:null,pet:null,franquia:'padrao',nome:'',cpf:'',email:'',fone:'',numero:'',compl:'',pgto:null,parcelas:12,step:0,waiting:null,done:false}; }
+resetV();
+
+/* Prêmio — MESMA fórmula do site (resPremio) */
+function premioMensal(pacV,franqV,assistV,petV){
+  let txa=RES.basicaTxa;
+  const pac=PACOTES.find(p=>p.v===(pacV||V.pacote)); if(pac)pac.cobs.forEach(id=>{txa+=RES.txas[id]||0;});
+  let anual=V.lmi*txa;
+  const ft=RES.franquias.find(f=>f.v===(franqV||V.franquia))||{fator:1}; anual*=ft.fator;
+  const temDE=pac&&pac.cobs.indexOf(3)>=0, temRoubo=pac&&pac.cobs.indexOf(9)>=0;
+  if(V.quest.solar&&temDE)anual*=RES.solarCoef;
+  if(V.quest.sin)anual*=RES.sinistroCoef;
+  if(temRoubo&&V.quest.prot.length)anual*=Math.max(0.90,1-0.02*V.quest.prot.length);
+  anual*=RES.vigFator;
+  let mensal=anual/12;
+  const as=RES.assist.find(a=>a.v===(assistV!==undefined?assistV:V.assist)); if(as)mensal+=as.preco;
+  const pt=RES.pet.find(p=>p.v===(petV!==undefined?petV:V.pet)); if(pt)mensal+=pt.preco;
+  return mensal;
+}
+function totais(){ const liq=premioMensal(); const iof=liq*IOF_RATE; return {liq:liq,iof:iof,total:liq+iof}; }
+const fmt=v=>'R$ '+(Math.round(v*100)/100).toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g,'.');
+const fmt0=v=>'R$ '+Math.round(v).toString().replace(/\B(?=(\d{3})+(?!\d))/g,'.');
+const digits=s=>(s||'').replace(/\D/g,'');
+function esc(t){ return String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function cpfOk(c){ c=digits(c); if(c.length!==11||/^(\d)\1+$/.test(c))return false;
+  let s=0; for(let i=0;i<9;i++)s+=+c[i]*(10-i); let d=11-s%11; if(d>9)d=0; if(d!==+c[9])return false;
+  s=0; for(let i=0;i<10;i++)s+=+c[i]*(11-i); d=11-s%11; if(d>9)d=0; return d===+c[10]; }
+const emailOk=e=>/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(e||'');
+
+/* ---------- UI helpers ---------- */
+const stream=()=>document.getElementById('stream');
+const now=()=>new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+function scrollEnd(){ requestAnimationFrame(()=>{ window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'}); }); }
+function vicSay(html,cb,delay){
+  const wrap=document.createElement('div'); wrap.className='msg';
+  wrap.innerHTML='<span class="mav"><img src="vic-avatar.png" alt=""></span><div class="mb"><span class="typing"><i></i><i></i><i></i></span></div>';
+  stream().appendChild(wrap); scrollEnd();
+  const t=Math.min(1700,480+String(html).length*9);
+  setTimeout(()=>{ wrap.querySelector('.mb').innerHTML=html+'<span class="tim">'+now()+'</span>'; scrollEnd(); if(cb)setTimeout(cb,260); },(delay!==undefined?delay:t));
+}
+function meSay(text){
+  const wrap=document.createElement('div'); wrap.className='msg me';
+  wrap.innerHTML='<div class="mb">'+esc(text)+'<span class="tim">'+now()+'</span></div>';
+  stream().appendChild(wrap); scrollEnd();
+}
+function clearAsk(){ const old=document.getElementById('ask'); if(old)old.remove(); }
+function askChips(opts,onPick,multi){
+  clearAsk();
+  const box=document.createElement('div'); box.className='chips'; box.id='ask';
+  const sel=new Set();
+  opts.forEach(o=>{
+    const b=document.createElement('button'); b.className='chip'+(o.rec?' rec':'');
+    b.innerHTML='<b>'+o.n+'</b>'+(o.s?'<span>'+o.s+'</span>':'')+(o.pr?'<span class="pr">'+o.pr+'</span>':'');
+    b.onclick=()=>{ if(multi){ if(o.v==='__none'){ sel.clear(); box.querySelectorAll('.chip').forEach(c=>c.classList.remove('on')); b.classList.add('on'); } else { b.classList.toggle('on'); if(b.classList.contains('on'))sel.add(o.v); else sel.delete(o.v); const none=box.querySelector('[data-none]'); if(none)none.classList.remove('on'); } return; }
+      clearAsk(); onPick(o); };
+    if(o.v==='__none')b.setAttribute('data-none','1');
+    box.appendChild(b);
+  });
+  if(multi){
+    const go=document.createElement('button'); go.className='go-btn'; go.textContent='Confirmar seleção';
+    go.onclick=()=>{ clearAsk(); onPick(Array.from(sel)); };
+    box.appendChild(go);
+  }
+  stream().appendChild(box); scrollEnd();
+}
+function askForm(title,sub,fieldsHTML,btn,onSubmit,icon){
+  clearAsk();
+  const d=document.createElement('div'); d.className='fcard'; d.id='ask';
+  d.innerHTML='<div class="fh"><span class="ic">'+(icon||'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0116 0"/></svg>')+'</span><div><b>'+title+'</b><span>'+sub+'</span></div></div>'
+    +fieldsHTML
+    +'<button class="fbtn" id="fgo">'+btn+'</button>'
+    +'<div class="fnote"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8-7 9-4-1-7-4.5-7-9V6z"/></svg>Seus dados estão protegidos pela LGPD</div>';
+  stream().appendChild(d); scrollEnd();
+  d.querySelector('#fgo').onclick=()=>onSubmit(d);
+  const f=d.querySelector('input'); if(f)setTimeout(()=>f.focus(),150);
+  return d;
+}
+function fieldErr(d,id,msg){ const ff=d.querySelector('#'+id).closest('.ff'); ff.classList.add('err'); ff.querySelector('.fer').textContent=msg; }
+function clearErrs(d){ d.querySelectorAll('.ff.err').forEach(f=>f.classList.remove('err')); }
+
+/* Máscaras */
+function maskCPF(el){ el.addEventListener('input',()=>{ let v=digits(el.value).slice(0,11); el.value=v.replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d{1,2})$/,'$1-$2'); }); }
+function maskFone(el){ el.addEventListener('input',()=>{ let v=digits(el.value).slice(0,11); el.value=v.length>10?v.replace(/(\d{2})(\d{5})(\d{0,4})/,'($1) $2-$3'):v.replace(/(\d{2})(\d{4})(\d{0,4})/,'($1) $2-$3'); }); }
+function maskCEP(el){ el.addEventListener('input',()=>{ let v=digits(el.value).slice(0,8); el.value=v.replace(/(\d{5})(\d{1,3})$/,'$1-$2'); }); }
+
+/* Passos do topo */
+const STEPS=['Imóvel','Perfil','Simulação','Dados','Pagamento'];
+function paintSteps(){
+  const el=document.getElementById('steps'); if(!el)return;
+  el.innerHTML=STEPS.map((s,i)=>{
+    const st=i<V.step?'done':(i===V.step?'cur':'');
+    return '<div class="stp '+st+'"><span class="n">'+(i<V.step?'✓':(i+1))+'</span><span class="l">'+s+'</span></div>'+(i<STEPS.length-1?'<span class="sbar'+(i<V.step?' done':'')+'"><i></i></span>':'');
+  }).join('');
+}
+function setStep(n){ V.step=n; paintSteps(); }
+</script>
+
+<script>
+'use strict';
+/* =====================================================================
+   ROTEIRO DA CONVERSA — Seguro Residencial (mesmas perguntas e regras)
+===================================================================== */
+function startChat(){
+  document.getElementById('welcome').style.display='none';
+  document.getElementById('success').style.display='none';
+  document.getElementById('chat').style.display='flex';
+  stream().innerHTML=''; resetV(); setStep(0);
+  window.scrollTo(0,0);
+  const h=new Date().getHours(); const sauda=h<12?'Bom dia':(h<18?'Boa tarde':'Boa noite');
+  vicSay(sauda+'! 👋 Eu sou a <b>Vic</b>, assistente da Você Seguradora. 💚<br><br>Vou te ajudar a proteger a sua casa com o <b>Seguro Residencial</b> — é rápido, sem compromisso e você vê o preço na hora. Se tiver qualquer dúvida no caminho, é só me perguntar aqui embaixo, tá bom?',()=>{
+    vicSay('Pra começar: <b>qual é o tipo do imóvel</b> que você quer proteger?',qTipo);
+  });
+}
+function qTipo(){
+  askChips(RES.tiposImovel.map(t=>({v:t.v,n:t.n,s:t.s})),o=>{
+    V.tipo=o.v; meSay(o.n);
+    vicSay('Anotado! 🏠 E a <b>ocupação</b>: você usa esse imóvel como moradia habitual ou é de veraneio?',qOcup);
+  });
+}
+function qOcup(){
+  askChips(RES.ocupacoes.map(t=>({v:t.v,n:t.n,s:t.s})),o=>{
+    V.ocup=o.v; meSay(o.n);
+    vicSay('Perfeito. E qual é a <b>sua relação com o imóvel</b>?',qPerfil);
+  });
+}
+function qPerfil(){
+  askChips(RES.perfis.map(t=>({v:t.v,n:t.n,s:t.s})),o=>{
+    V.perfil=o.v; meSay(o.n);
+    vicSay('Show! Agora me diz o <b>CEP</b> do imóvel, pra eu localizar o endereço direitinho. 📍',qCEP);
+  });
+}
+function qCEP(){
+  askForm('Localização do imóvel','Digite o CEP do imóvel a ser segurado',
+    '<div class="ff"><label for="f-cep">CEP</label><input id="f-cep" inputmode="numeric" placeholder="00000-000"><div class="fer"></div></div>',
+    'Buscar endereço',async d=>{
+      clearErrs(d);
+      const cep=digits(d.querySelector('#f-cep').value);
+      if(cep.length!==8){ fieldErr(d,'f-cep','Digite um CEP válido (8 dígitos).'); return; }
+      d.querySelector('#fgo').textContent='Buscando…';
+      let a=null;
+      try{ const r=await fetch('https://viacep.com.br/ws/'+cep+'/json/'); a=await r.json(); }catch(e){}
+      if(!a||a.erro){ d.querySelector('#fgo').textContent='Buscar endereço'; fieldErr(d,'f-cep','Não encontrei esse CEP. Confere pra mim?'); return; }
+      V.cep=cep; V.addr=a; clearAsk(); meSay('CEP '+cep.replace(/(\d{5})(\d{3})/,'$1-$2'));
+      const lin=[a.logradouro,a.bairro,(a.localidade&&(a.localidade+'/'+a.uf))].filter(Boolean).join(' · ');
+      vicSay('Encontrei! 📌 <b>'+esc(lin||('CEP '+cep))+'</b><br>É esse mesmo?',()=>{
+        askChips([{v:'sim',n:'É esse mesmo ✓'},{v:'nao',n:'Corrigir CEP'}],o=>{
+          if(o.v==='nao'){ meSay('Corrigir CEP'); vicSay('Sem problema! Me passa o CEP de novo:',qCEP); return; }
+          meSay('É esse mesmo'); vicSay('Ótimo! Agora, <b>3 perguntinhas rápidas de segurança</b> — fazem parte da análise do seguro, tá? 😉',()=>{ V.elegIdx=0; qEleg(); });
+        });
+      });
+    },'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-5.3-7-11a7 7 0 0114 0c0 5.7-7 11-7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>');
+}
+function qEleg(){
+  const e=RES.eleg[V.elegIdx];
+  if(!e){ setStep(1); vicSay('Perfeito, tudo certo por aqui! ✅<br>Mais duas rapidinhas que ajudam a <b>calibrar o seu preço</b>:',qSolar); return; }
+  vicSay(e.q+'<br><span style="font-size:12px;color:var(--txt2)">'+e.s+'</span>',()=>{
+    askChips([{v:'nao',n:'Não'},{v:'sim',n:'Sim'}],o=>{
+      meSay(o.v==='sim'?'Sim':'Não'); V.eleg[e.k]=o.v;
+      if(o.v==='sim'){ recusa(); return; }
+      V.elegIdx++; qEleg();
+    });
+  });
+}
+function recusa(){
+  vicSay('Poxa… 😔 Pelas regras deste produto, <b>imóveis com essa característica ainda não podem ser aceitos</b> na contratação digital.<br><br>Mas calma: nosso time pode avaliar o seu caso individualmente e encontrar um caminho. Quer falar com um especialista?',()=>{
+    askChips([{v:'wa',n:'Falar com especialista 💬'},{v:'re',n:'Refazer a cotação'}],o=>{
+      if(o.v==='wa'){ meSay('Falar com especialista'); window.open('https://wa.me/5511930549424?text=Ol%C3%A1!%20Fiz%20a%20cota%C3%A7%C3%A3o%20com%20a%20Vic%20e%20preciso%20de%20uma%20an%C3%A1lise%20individual.','_blank'); vicSay('Te encaminhei pro nosso WhatsApp! 💚 Se quiser, também posso recomeçar a cotação por aqui.',()=>{ askChips([{v:'re',n:'Recomeçar cotação'}],()=>{ startChat(); }); }); }
+      else { startChat(); }
+    });
+  });
+}
+function qSolar(){
+  vicSay('O imóvel tem <b>sistema de energia solar</b> (placas/inversores)?',()=>{
+    askChips([{v:'nao',n:'Não'},{v:'sim',n:'Sim'}],o=>{ V.quest.solar=(o.v==='sim'); meSay(o.v==='sim'?'Sim':'Não');
+      vicSay('E nos <b>últimos 3 anos</b>, houve algum <b>sinistro</b> (ocorrência com prejuízo) nesse imóvel?',qSin);
+    });
+  });
+}
+function qSin(){
+  askChips([{v:'nao',n:'Não'},{v:'sim',n:'Sim'}],o=>{ V.quest.sin=(o.v==='sim'); meSay(o.v==='sim'?'Sim':'Não');
+    vicSay('Última dessa parte: o imóvel tem <b>itens de proteção</b>? Pode marcar mais de um — cada proteção pode <b>reduzir o seu preço</b>. 🛡️',qProt);
+  });
+}
+function qProt(){
+  const opts=RES.protecoes.map(p=>({v:p,n:p})).concat([{v:'__none',n:'Nenhuma dessas'}]);
+  askChips(opts,sel=>{
+    V.quest.prot=(Array.isArray(sel)?sel:[]).filter(x=>x!=='__none');
+    meSay(V.quest.prot.length?V.quest.prot.join(', '):'Nenhuma');
+    vicSay('Agora a parte importante: <b>qual valor você quer proteger?</b> É a <b>Importância Segurada</b> — pense no custo de reconstruir o imóvel e repor o que há nele.',qLMI);
+  },true);
+}
+function qLMI(){
+  const opts=[100000,200000,300000,500000].map(v=>({v:v,n:fmt0(v)})).concat([{v:'outro',n:'Outro valor'}]);
+  askChips(opts,o=>{
+    if(o.v==='outro'){
+      meSay('Outro valor');
+      askForm('Importância Segurada','Entre '+fmt0(RES.lmi.min)+' e '+fmt0(RES.lmi.max),
+        '<div class="ff"><label for="f-lmi">Valor desejado (R$)</label><input id="f-lmi" inputmode="numeric" placeholder="Ex.: 250000"><div class="fer"></div></div>',
+        'Confirmar valor',d=>{
+          clearErrs(d);
+          let v=parseInt(digits(d.querySelector('#f-lmi').value),10)||0;
+          if(v<RES.lmi.min||v>RES.lmi.max){ fieldErr(d,'f-lmi','O valor precisa estar entre '+fmt0(RES.lmi.min)+' e '+fmt0(RES.lmi.max)+'.'); return; }
+          v=Math.round(v/RES.lmi.step)*RES.lmi.step;
+          V.lmi=v; clearAsk(); meSay(fmt0(v)); simular();
+        },'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 7H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>');
+      return;
+    }
+    V.lmi=o.v; meSay(o.n); simular();
+  });
+}
+/* ---------- Simulação ---------- */
+function simular(){
+  setStep(2);
+  vicSay('Perfeito! Deixa comigo… 🧮 Estou <b>analisando seu perfil</b> e calculando as melhores opções pra você.',()=>{
+    setTimeout(()=>{
+      vicSay('Prontinho! ✨ Com base no que você me contou, aqui estão os <b>3 planos de cobertura</b> — do essencial ao mais completo. Toque em um pra escolher:',()=>{
+        askChips(PACOTES.map(p=>({v:p.v,n:p.n,s:p.s,pr:fmt(premioMensal(p.v,'padrao',null,''))+'/mês em coberturas',rec:p.rec})),o=>{
+          V.pacote=o.v; const p=PACOTES.find(x=>x.v===o.v); meSay('Plano '+p.n);
+          vicSay('Boa escolha! 👏 Agora vamos deixar sua proteção completa: qual <b>plano de assistência 24h</b> você quer? São serviços do dia a dia — chaveiro, encanador, eletricista e mais.',qAssist);
+        });
+      });
+    },900);
+  });
+}
+function qAssist(){
+  askChips(RES.assist.map(a=>({v:a.v,n:a.n,s:a.s,pr:'+ '+fmt(a.preco)+'/mês',rec:a.rec})),o=>{
+    V.assist=o.v; meSay('Assistência '+o.n);
+    vicSay('E pros <b>pets</b> da casa? 🐾 Temos assistência veterinária opcional:',qPet);
+  });
+}
+function qPet(){
+  askChips(RES.pet.map(p=>({v:p.v,n:p.n,s:p.s,pr:p.preco?('+ '+fmt(p.preco)+'/mês'):'Grátis'})),o=>{
+    V.pet=o.v; meSay(o.n);
+    vicSay('Última personalização: a <b>franquia</b> — sua participação em caso de sinistro. Quanto menor a franquia, um pouquinho maior o prêmio:',qFranquia);
+  });
+}
+function qFranquia(){
+  askChips(RES.franquias.map(f=>({v:f.v,n:f.n,s:f.s,rec:f.rec})),o=>{
+    V.franquia=o.v; meSay('Franquia '+o.n);
+    resumo();
+  });
+}
+function resumo(){
+  const t=totais(); const p=PACOTES.find(x=>x.v===V.pacote); const a=RES.assist.find(x=>x.v===V.assist); const pt=RES.pet.find(x=>x.v===V.pet);
+  vicSay('Fechou! 🎯 Olha como ficou a sua proteção — <b>preço transparente, com IOF já detalhado</b>:',()=>{
+    clearAsk();
+    const d=document.createElement('div'); d.className='pcard'; d.id='ask';
+    d.innerHTML='<div class="pt"><div class="lb">Sua proteção por</div><div class="vl">'+fmt(t.total)+'<small> /mês</small></div><div class="lb" style="margin-top:4px;text-transform:none;letter-spacing:0">inclui IOF de 7,38%</div></div>'
+      +'<div class="rows">'
+      +'<div class="prow"><span>Pacote de coberturas</span><b>'+p.n+'</b></div>'
+      +'<div class="prow"><span>Assistência 24h</span><b>'+a.n+'</b></div>'
+      +'<div class="prow"><span>Assistência pet</span><b>'+(pt&&pt.v?pt.n:'Não contratado')+'</b></div>'
+      +'<div class="prow"><span>Franquia</span><b>'+RES.franquias.find(f=>f.v===V.franquia).n+'</b></div>'
+      +'<div class="prow"><span>Importância Segurada</span><b>'+fmt0(V.lmi)+'</b></div>'
+      +'<div class="prow"><span>Prêmio líquido</span><b>'+fmt(t.liq)+'</b></div>'
+      +'<div class="prow"><span>IOF (7,38%)</span><b>'+fmt(t.iof)+'</b></div>'
+      +'<div class="prow tot"><span>Total mensal</span><b>'+fmt(t.total)+'</b></div>'
+      +'</div>'
+      +'<div class="pa"><button class="fbtn" id="p-go">Quero contratar ✓</button><button class="fbtn ghost" id="p-adj">Ajustar</button></div>';
+    stream().appendChild(d); scrollEnd();
+    d.querySelector('#p-go').onclick=()=>{ clearAsk(); meSay('Quero contratar'); setStep(3);
+      vicSay('Uhul! 🎉 Agora preciso de alguns <b>dados pessoais</b> pra montar sua proposta. Levam menos de 1 minuto:',qDados); };
+    d.querySelector('#p-adj').onclick=()=>{ clearAsk(); meSay('Quero ajustar');
+      vicSay('Claro! O que você quer ajustar?',()=>{
+        askChips([{v:'pac',n:'Pacote de coberturas'},{v:'ass',n:'Assistência 24h'},{v:'pet',n:'Assistência pet'},{v:'fra',n:'Franquia'},{v:'lmi',n:'Importância Segurada'}],o=>{
+          meSay(o.n);
+          if(o.v==='pac'){ vicSay('Escolha o novo pacote:',()=>{ askChips(PACOTES.map(p2=>({v:p2.v,n:p2.n,s:p2.s,pr:fmt(premioMensal(p2.v,V.franquia,null,''))+'/mês em coberturas',rec:p2.rec})),x=>{ V.pacote=x.v; meSay('Plano '+PACOTES.find(z=>z.v===x.v).n); resumo(); }); }); }
+          else if(o.v==='ass'){ vicSay('Escolha a nova assistência:',()=>{ askChips(RES.assist.map(a2=>({v:a2.v,n:a2.n,s:a2.s,pr:'+ '+fmt(a2.preco)+'/mês',rec:a2.rec})),x=>{ V.assist=x.v; meSay('Assistência '+RES.assist.find(z=>z.v===x.v).n); resumo(); }); }); }
+          else if(o.v==='pet'){ vicSay('Escolha o plano pet:',()=>{ askChips(RES.pet.map(p2=>({v:p2.v,n:p2.n,s:p2.s,pr:p2.preco?('+ '+fmt(p2.preco)+'/mês'):'Grátis'})),x=>{ V.pet=x.v; meSay(RES.pet.find(z=>z.v===x.v).n); resumo(); }); }); }
+          else if(o.v==='fra'){ vicSay('Escolha a franquia:',()=>{ askChips(RES.franquias.map(f2=>({v:f2.v,n:f2.n,s:f2.s,rec:f2.rec})),x=>{ V.franquia=x.v; meSay('Franquia '+RES.franquias.find(z=>z.v===x.v).n); resumo(); }); }); }
+          else { qLMI(); }
+        });
+      });
+    };
+  });
+}
+</script>
+
+<script>
+'use strict';
+/* ---------- Dados pessoais / endereço / pagamento / gravação ---------- */
+function qDados(){
+  askForm('Seus dados','Usados só para a proposta — protegidos pela LGPD',
+    '<div class="ff"><label for="f-nome">Nome completo</label><input id="f-nome" autocomplete="name" placeholder="Como no seu documento"><div class="fer"></div></div>'
+    +'<div class="ff"><label for="f-cpf">CPF</label><input id="f-cpf" inputmode="numeric" placeholder="000.000.000-00"><div class="fer"></div></div>'
+    +'<div class="ff"><label for="f-mail">E-mail</label><input id="f-mail" type="email" autocomplete="email" placeholder="voce@email.com"><div class="fer"></div></div>'
+    +'<div class="ff"><label for="f-fone">Telefone (WhatsApp)</label><input id="f-fone" inputmode="numeric" autocomplete="tel" placeholder="(11) 99999-9999"><div class="hint">📱 Usamos este número para enviar a apólice e avisos importantes.</div><div class="fer"></div></div>',
+    'Continuar →',d=>{
+      clearErrs(d);
+      const nome=d.querySelector('#f-nome').value.trim();
+      const cpf=d.querySelector('#f-cpf').value, mail=d.querySelector('#f-mail').value.trim(), fone=d.querySelector('#f-fone').value;
+      let ok=true;
+      if(nome.split(' ').filter(Boolean).length<2){ fieldErr(d,'f-nome','Digite seu nome completo.'); ok=false; }
+      if(!cpfOk(cpf)){ fieldErr(d,'f-cpf','CPF inválido. Confere os números?'); ok=false; }
+      if(!emailOk(mail)){ fieldErr(d,'f-mail','Digite um e-mail válido.'); ok=false; }
+      if(digits(fone).length<10){ fieldErr(d,'f-fone','Digite um telefone com DDD.'); ok=false; }
+      if(!ok)return;
+      V.nome=nome; V.cpf=digits(cpf); V.email=mail.toLowerCase(); V.fone=digits(fone);
+      clearAsk(); meSay(nome.split(' ')[0]+' · CPF ✓ · e-mail ✓');
+      vicSay('Prazer, <b>'+esc(nome.split(' ')[0])+'</b>! 😊 Agora confirma o <b>endereço do imóvel</b> — já preenchi com o CEP que você me passou:',qEndereco);
+    });
+  setTimeout(()=>{ const d=document.getElementById('ask'); if(d){ maskCPF(d.querySelector('#f-cpf')); maskFone(d.querySelector('#f-fone')); } },100);
+}
+function qEndereco(){
+  const a=V.addr||{};
+  askForm('Endereço do imóvel','Confirme e complete com o número',
+    '<div class="ff"><label for="f-rua">Endereço</label><input id="f-rua" value="'+esc(a.logradouro||'')+'" placeholder="Rua, avenida…"><div class="fer"></div></div>'
+    +'<div class="frow"><div class="ff"><label for="f-num">Número</label><input id="f-num" inputmode="numeric" placeholder="Nº"><div class="fer"></div></div>'
+    +'<div class="ff"><label for="f-comp">Complemento</label><input id="f-comp" placeholder="Apto, bloco…"><div class="fer"></div></div></div>'
+    +'<div class="ff"><label for="f-bai">Bairro</label><input id="f-bai" value="'+esc(a.bairro||'')+'"><div class="fer"></div></div>'
+    +'<div class="frow"><div class="ff"><label for="f-cid">Cidade</label><input id="f-cid" value="'+esc(a.localidade||'')+'"><div class="fer"></div></div>'
+    +'<div class="ff"><label for="f-uf">Estado</label><input id="f-uf" maxlength="2" value="'+esc(a.uf||'')+'" style="text-transform:uppercase"><div class="fer"></div></div></div>',
+    'Confirmar endereço →',d=>{
+      clearErrs(d); let ok=true;
+      const rua=d.querySelector('#f-rua').value.trim(), num=d.querySelector('#f-num').value.trim();
+      const bai=d.querySelector('#f-bai').value.trim(), cid=d.querySelector('#f-cid').value.trim(), uf=d.querySelector('#f-uf').value.trim().toUpperCase();
+      if(!rua){ fieldErr(d,'f-rua','Informe o endereço.'); ok=false; }
+      if(!num){ fieldErr(d,'f-num','Informe o número.'); ok=false; }
+      if(!bai){ fieldErr(d,'f-bai','Informe o bairro.'); ok=false; }
+      if(!cid){ fieldErr(d,'f-cid','Informe a cidade.'); ok=false; }
+      if(uf.length!==2){ fieldErr(d,'f-uf','UF.'); ok=false; }
+      if(!ok)return;
+      V.addr=Object.assign({},V.addr,{logradouro:rua,bairro:bai,localidade:cid,uf:uf}); V.numero=num; V.compl=d.querySelector('#f-comp').value.trim();
+      clearAsk(); meSay(rua+', '+num+' — '+cid+'/'+uf); setStep(4);
+      vicSay('Endereço confirmado! ✅ Falta pouco: como você prefere <b>pagar</b>?',qPgto);
+    },'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>');
+}
+function qPgto(){
+  askChips([
+    {v:'cartao',n:'Cartão de crédito',s:'Link de pagamento seguro · até 12x sem juros'},
+    {v:'pix',n:'PIX',s:'Código copia e cola · confirmação na hora'},
+    {v:'boleto',n:'Boleto bancário',s:'Emitido aqui · pague até o vencimento'}],o=>{
+    V.pgto=o.v; meSay(o.n);
+    if(o.v==='pix'){ V.parcelas=12; confirmar(); return; }
+    vicSay('E em <b>quantas parcelas</b>?',()=>{
+      const t=totais(); const anual=t.total*12;
+      const ops=[1,3,6,12].map(n=>({v:n,n:(n===1?'À vista':n+'x sem juros'),s:fmt(anual/n)+(n===1?'':' /parcela')}));
+      askChips(ops,x=>{ V.parcelas=x.v; meSay(x.n); confirmar(); });
+    });
+  });
+}
+function pagoLabel(){
+  return V.pgto==='cartao'?('Cartão de crédito · '+(V.parcelas===1?'à vista':V.parcelas+'x sem juros')):(V.pgto==='boleto'?('Boleto bancário · '+(V.parcelas===1?'à vista':V.parcelas+'x')):'PIX · mensal');
+}
+function confirmar(){
+  const t=totais(); const pagoTxt=pagoLabel();
+  vicSay('Perfeito! Revisa comigo antes do pagamento: 👇',()=>{
+    clearAsk();
+    const d=document.createElement('div'); d.className='pcard'; d.id='ask';
+    d.innerHTML='<div class="pt"><div class="lb">Total mensal (com IOF)</div><div class="vl">'+fmt(t.total)+'<small> /mês</small></div></div>'
+      +'<div class="rows">'
+      +'<div class="prow"><span>Segurado(a)</span><b>'+esc(V.nome)+'</b></div>'
+      +'<div class="prow"><span>Imóvel</span><b>'+esc((V.addr.logradouro||'')+', '+V.numero)+'</b></div>'
+      +'<div class="prow"><span>Plano</span><b>'+PACOTES.find(p=>p.v===V.pacote).n+' · IS '+fmt0(V.lmi)+'</b></div>'
+      +'<div class="prow"><span>Assistência</span><b>'+RES.assist.find(a=>a.v===V.assist).n+(V.pet?' + '+RES.pet.find(p=>p.v===V.pet).n:'')+'</b></div>'
+      +'<div class="prow"><span>Pagamento</span><b>'+pagoTxt+'</b></div>'
+      +'</div>'
+      +'<div style="padding:0 18px 6px"><label style="display:flex;gap:9px;align-items:flex-start;font-size:12px;color:var(--txt2);cursor:pointer;line-height:1.5"><input type="checkbox" id="c-terms" style="margin-top:2px;accent-color:#46EF80"> Li e concordo com os <b style="color:#fff">Termos e Condições</b> do seguro e autorizo o tratamento dos meus dados conforme a <b style="color:#fff">LGPD</b>.</label></div>'
+      +'<div class="pa"><button class="fbtn" id="c-go">Ir para o pagamento 🔒</button><button class="fbtn ghost" id="c-adj">Ajustar</button></div>';
+    stream().appendChild(d); scrollEnd();
+    d.querySelector('#c-adj').onclick=()=>{ clearAsk(); meSay('Quero ajustar'); resumo(); };
+    d.querySelector('#c-go').onclick=()=>{
+      if(!d.querySelector('#c-terms').checked){ d.querySelector('#c-terms').closest('label').style.color='#ff8a9a'; return; }
+      clearAsk(); meSay('Ir para o pagamento');
+      if(V.pgto==='cartao')payCartao();
+      else if(V.pgto==='pix')payPix();
+      else payBoleto();
+    };
+  });
+}
+
+/* ---------- Pagamento: CARTÃO via link seguro ---------- */
+function payCartao(){
+  const t=totais(); const valor=t.total*12/V.parcelas;
+  vicSay('Pra sua segurança, o pagamento com cartão acontece no nosso <b>ambiente seguro</b> — nunca peça ou digite dados de cartão dentro de um chat, tá? 😉🔒<br><br>Aqui está o seu <b>link de pagamento</b>:',()=>{
+    clearAsk();
+    const d=document.createElement('div'); d.className='fcard'; d.id='ask';
+    d.innerHTML='<div class="fh"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg></span><div><b>Link de pagamento seguro</b><span>pay.voceseguradora.com.br · criptografado</span></div></div>'
+      +'<div style="background:rgba(0,0,0,.22);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:12px">'
+      +'<div style="display:flex;justify-content:space-between;font-size:12.5px;color:var(--txt2);margin-bottom:3px"><span>Valor'+(V.parcelas>1?' (1ª de '+V.parcelas+'x)':'')+'</span><b style="color:#fff">'+fmt(valor)+'</b></div>'
+      +'<div style="display:flex;justify-content:space-between;font-size:12.5px;color:var(--txt2)"><span>Proposta</span><b style="color:#fff">Seguro Residencial</b></div>'
+      +'</div>'
+      +'<button class="fbtn" id="pay-open">Abrir link de pagamento 🔒</button>'
+      +'<button class="fbtn ghost" id="pay-done" style="margin-top:8px;background:transparent;border:1.5px solid var(--line2);color:var(--neon);box-shadow:none">Já realizei o pagamento ✓</button>'
+      +'<div class="fnote"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8-7 9-4-1-7-4.5-7-9V6z"/></svg>Após pagar, volte aqui e toque em "Já realizei o pagamento".</div>';
+    stream().appendChild(d); scrollEnd();
+    d.querySelector('#pay-open').onclick=()=>{ openCheckout(valor); };
+    d.querySelector('#pay-done').onclick=()=>{
+      if(V.paid){ clearAsk(); meSay('Já realizei o pagamento'); pagoOk(); return; }
+      meSay('Já realizei o pagamento');
+      vicSay('Hmm, ainda <b>não identifiquei</b> o seu pagamento por aqui… 🧐 Às vezes leva alguns instantes. Se você ainda não concluiu, abre o link e finaliza — eu espero! 💚');
+    };
+  });
+}
+/* Checkout seguro (overlay em ambiente próprio — demonstração) */
+function openCheckout(valor){
+  let ov=document.getElementById('checkout'); if(ov)ov.remove();
+  ov=document.createElement('div'); ov.id='checkout';
+  ov.style.cssText='position:fixed;inset:0;z-index:100;background:rgba(0,10,14,.72);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:18px;overflow:auto';
+  ov.innerHTML='<div style="background:#fff;color:#0b2530;border-radius:20px;max-width:400px;width:100%;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.5);animation:msgIn .3s ease both">'
+    +'<div style="background:#f2f6f7;border-bottom:1px solid #e3ecee;padding:11px 16px;display:flex;align-items:center;gap:8px;font-size:12px;color:#41626b">'
+    +'<svg viewBox="0 0 24 24" fill="none" stroke="#279989" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>'
+    +'<b style="color:#0b2530">pay.voceseguradora.com.br</b><span style="margin-left:auto;background:rgba(39,153,137,.12);color:#1c7568;font-weight:800;font-size:10px;letter-spacing:.06em;border-radius:999px;padding:4px 9px">AMBIENTE SEGURO</span></div>'
+    +'<div style="padding:22px">'
+    +'<div style="display:flex;align-items:center;gap:10px;margin-bottom:16px"><span style="width:38px;height:38px;border-radius:11px;background:linear-gradient(135deg,#279989,#0a4b46);display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" fill="none" style="width:20px;height:20px"><path d="M4 4l7 16h2L20 4h-3.5L12 15.5 7.5 4z" fill="#fff"/></svg></span><div><b style="font-size:14px">Você Seguradora Pay</b><div style="font-size:11.5px;color:#6b8891">Seguro Residencial · '+(V.parcelas===1?'à vista':V.parcelas+'x sem juros')+'</div></div></div>'
+    +'<div style="text-align:center;background:#f2fbf6;border:1px solid rgba(39,153,137,.25);border-radius:14px;padding:12px;margin-bottom:16px"><div style="font-size:11px;font-weight:800;letter-spacing:.08em;color:#1c7568;text-transform:uppercase">Valor a pagar</div><div style="font-size:28px;font-weight:900;color:#0b2530">'+fmt(valor)+'</div></div>'
+    +'<div style="margin-bottom:11px"><label style="display:block;font-size:10.5px;font-weight:800;letter-spacing:.08em;color:#41626b;text-transform:uppercase;margin-bottom:5px">Número do cartão</label><input id="ck-num" inputmode="numeric" placeholder="0000 0000 0000 0000" style="width:100%;border:1.5px solid #d7e4e7;border-radius:11px;padding:12px 13px;font-size:14.5px;color:#0b2530"></div>'
+    +'<div style="margin-bottom:11px"><label style="display:block;font-size:10.5px;font-weight:800;letter-spacing:.08em;color:#41626b;text-transform:uppercase;margin-bottom:5px">Nome impresso no cartão</label><input id="ck-nome" placeholder="Como está no cartão" style="width:100%;border:1.5px solid #d7e4e7;border-radius:11px;padding:12px 13px;font-size:14.5px;color:#0b2530"></div>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">'
+    +'<div><label style="display:block;font-size:10.5px;font-weight:800;letter-spacing:.08em;color:#41626b;text-transform:uppercase;margin-bottom:5px">Validade</label><input id="ck-val" inputmode="numeric" placeholder="MM/AA" style="width:100%;border:1.5px solid #d7e4e7;border-radius:11px;padding:12px 13px;font-size:14.5px;color:#0b2530"></div>'
+    +'<div><label style="display:block;font-size:10.5px;font-weight:800;letter-spacing:.08em;color:#41626b;text-transform:uppercase;margin-bottom:5px">CVV</label><input id="ck-cvv" inputmode="numeric" placeholder="123" maxlength="4" style="width:100%;border:1.5px solid #d7e4e7;border-radius:11px;padding:12px 13px;font-size:14.5px;color:#0b2530"></div></div>'
+    +'<button id="ck-pay" style="width:100%;background:linear-gradient(135deg,#279989,#1c7568);color:#fff;font-weight:800;font-size:15px;border-radius:13px;padding:14px;box-shadow:0 10px 24px rgba(39,153,137,.35)">Pagar '+fmt(valor)+'</button>'
+    +'<button id="ck-x" style="width:100%;margin-top:9px;color:#6b8891;font-size:13px;font-weight:600">Voltar para a conversa</button>'
+    +'<div style="display:flex;align-items:center;justify-content:center;gap:6px;font-size:10.5px;color:#8aa4ab;margin-top:11px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>Pagamento criptografado · Ambiente de demonstração</div>'
+    +'</div></div>';
+  document.body.appendChild(ov);
+  ov.onclick=e=>{ if(e.target===ov)ov.remove(); };
+  ov.querySelector('#ck-x').onclick=()=>ov.remove();
+  const num=ov.querySelector('#ck-num'); num.addEventListener('input',()=>{ num.value=digits(num.value).slice(0,16).replace(/(\d{4})(?=\d)/g,'$1 '); });
+  const val=ov.querySelector('#ck-val'); val.addEventListener('input',()=>{ let v=digits(val.value).slice(0,4); val.value=v.length>2?v.slice(0,2)+'/'+v.slice(2):v; });
+  ov.querySelector('#ck-pay').onclick=()=>{
+    const okNum=digits(num.value).length>=15, okNome=ov.querySelector('#ck-nome').value.trim().length>3, okVal=digits(val.value).length===4, okCvv=digits(ov.querySelector('#ck-cvv').value).length>=3;
+    [[num,okNum],[ov.querySelector('#ck-nome'),okNome],[val,okVal],[ov.querySelector('#ck-cvv'),okCvv]].forEach(([el,ok])=>{ el.style.borderColor=ok?'#d7e4e7':'#e85d75'; });
+    if(!(okNum&&okNome&&okVal&&okCvv))return;
+    const b=ov.querySelector('#ck-pay'); b.textContent='Processando…'; b.disabled=true;
+    setTimeout(()=>{
+      b.textContent='Pagamento aprovado ✓'; b.style.background='linear-gradient(135deg,#2fd977,#1c9a5b)';
+      V.paid=true;
+      setTimeout(()=>{ ov.remove(); clearAsk(); vicSay('<b>Pagamento aprovado!</b> ✅ Recebi a confirmação aqui.',pagoOk,500); },800);
+    },1400);
+  };
+}
+/* ---------- Pagamento: PIX copia e cola ---------- */
+function payPix(){
+  const t=totais();
+  const code='00020126580014BR.GOV.BCB.PIX0136'+(V.cpf||'00000000000')+'520400005303986540'+t.total.toFixed(2)+'5802BR5915VOCE SEGURADORA6009SAO PAULO62070503***6304'+Math.floor(1000+Math.random()*9000);
+  vicSay('O PIX é rapidinho: copia o código abaixo, paga no app do seu banco e volta aqui. 💚',()=>{
+    clearAsk();
+    const d=document.createElement('div'); d.className='fcard'; d.id='ask';
+    d.innerHTML='<div class="fh"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l4 4-4 4-4-4z"/><path d="M3 12l4-4 4 4-4 4z"/><path d="M13 12l4-4 4 4-4 4z"/><path d="M12 13l4 4-4 4-4-4z"/></svg></span><div><b>PIX — '+fmt(t.total)+'/mês</b><span>1ª mensalidade · débito automático nas próximas</span></div></div>'
+      +'<div style="background:rgba(0,0,0,.25);border:1px solid var(--line);border-radius:12px;padding:12px;font-family:monospace;font-size:11px;color:var(--txt2);word-break:break-all;max-height:74px;overflow:hidden;margin-bottom:10px">'+code+'</div>'
+      +'<button class="fbtn ghost" id="px-copy" style="background:transparent;border:1.5px solid var(--line2);color:var(--neon);box-shadow:none;margin-bottom:8px">Copiar código PIX</button>'
+      +'<button class="fbtn" id="px-done">Já fiz o PIX ✓</button>'
+      +'<div class="fnote"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8-7 9-4-1-7-4.5-7-9V6z"/></svg>Confirmação em instantes após o pagamento.</div>';
+    stream().appendChild(d); scrollEnd();
+    d.querySelector('#px-copy').onclick=()=>{ try{navigator.clipboard.writeText(code);}catch(e){} const b=d.querySelector('#px-copy'); b.textContent='Código copiado ✓'; setTimeout(()=>{ b.textContent='Copiar código PIX'; },1600); };
+    d.querySelector('#px-done').onclick=()=>{
+      clearAsk(); meSay('Já fiz o PIX');
+      vicSay('Verificando… 🔎',null,500);
+      setTimeout(()=>{ V.paid=true; vicSay('<b>PIX confirmado!</b> ✅',pagoOk,400); },1300);
+    };
+  });
+}
+/* ---------- Pagamento: BOLETO emitido na conversa ---------- */
+function payBoleto(){
+  const t=totais(); const valor=t.total*12/V.parcelas;
+  const venc=new Date(); venc.setDate(venc.getDate()+5);
+  const vencStr=('0'+venc.getDate()).slice(-2)+'/'+('0'+(venc.getMonth()+1)).slice(-2)+'/'+venc.getFullYear();
+  function g(n){let o='';for(let i=0;i<n;i++)o+=Math.floor(Math.random()*10);return o;}
+  const linha='23793.'+g(5)+' '+g(5)+'.'+g(6)+' '+g(5)+'.'+g(6)+' '+g(1)+' 9'+g(3)+('0000000000'+Math.round(valor*100)).slice(-10);
+  let bars=''; let s=42; for(let k=0;k<64;k++){ s=(s*1103515245+12345)>>>0; bars+='<span style="display:inline-block;width:'+(1+(s%3))+'px;height:38px;background:'+(((s>>5)&1)?'#06121a':'#fff')+'"></span>'; }
+  vicSay('Boleto emitido! 🧾 Você pode pagar <b>até o vencimento</b> — e a sua cobertura começa assim que o pagamento for confirmado.',()=>{
+    clearAsk();
+    const d=document.createElement('div'); d.className='fcard'; d.id='ask';
+    d.innerHTML='<div class="fh"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 8v8M11 8v8M14 8v8M17 8v8" stroke-width="1.6"/></svg></span><div><b>Boleto — '+fmt(valor)+(V.parcelas>1?' (1ª de '+V.parcelas+'x)':'')+'</b><span>Vencimento: '+vencStr+' · também enviamos por e-mail</span></div></div>'
+      +'<div class="bol" style="margin:0 0 12px"><div class="bh"><span>Você Seguradora</span><span>237-2</span></div>'
+      +'<div class="br"><span>Vencimento</span><b>'+vencStr+'</b></div>'
+      +'<div class="br"><span>Pagador</span><b>'+esc(V.nome)+'</b></div>'
+      +'<div class="br"><span>Valor do documento</span><b>'+fmt(valor)+'</b></div>'
+      +'<div class="bars">'+bars+'</div><div class="code">'+linha+'</div></div>'
+      +'<button class="fbtn ghost" id="bl-copy" style="background:transparent;border:1.5px solid var(--line2);color:var(--neon);box-shadow:none;margin-bottom:8px">Copiar linha digitável</button>'
+      +'<button class="fbtn" id="bl-done">Concluir contratação ✓</button>'
+      +'<div class="fnote"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8-7 9-4-1-7-4.5-7-9V6z"/></svg>Cobertura inicia após a confirmação do pagamento da 1ª parcela.</div>';
+    stream().appendChild(d); scrollEnd();
+    d.querySelector('#bl-copy').onclick=()=>{ try{navigator.clipboard.writeText(linha);}catch(e){} const b=d.querySelector('#bl-copy'); b.textContent='Linha copiada ✓'; setTimeout(()=>{ b.textContent='Copiar linha digitável'; },1600); };
+    d.querySelector('#bl-done').onclick=()=>{ clearAsk(); meSay('Concluir contratação'); V.paid=false; pagoOk(); };
+  });
+}
+/* ---------- Conclusão: grava e mostra sucesso ---------- */
+async function pagoOk(){
+  const t=totais(); const pagoTxt=pagoLabel();
+  vicSay('Enviando a sua proposta… 🚀',null,600);
+  const num='VS-'+Date.now().toString(36).toUpperCase().slice(-8);
+  const pol={
+    tipo:'Seguro Residencial',
+    item:(V.addr.logradouro||'Residência')+', '+V.numero+(V.addr.localidade?(' — '+V.addr.localidade+'/'+V.addr.uf):''),
+    preco:fmt(t.total)+'/mês',
+    cobertura:PACOTES.find(p=>p.v===V.pacote).n+' · IS '+fmt0(V.lmi)+' · '+RES.assist.find(a=>a.v===V.assist).n+(V.pet?(' + '+RES.pet.find(p=>p.v===V.pet).n):''),
+    pagamento:pagoTxt, status:'ativa'
+  };
+  let saved=false;
+  if(SB){ try{ const r=await SB.from('guest_quotes').insert({cpf:V.cpf,email:V.email,phone:V.fone,tipo:pol.tipo,item:pol.item,preco:pol.preco,cobertura:pol.cobertura,pagamento:pol.pagamento,status:pol.status}); saved=!(r&&r.error); }catch(e){} }
+  setTimeout(()=>{ successScreen(num,t,pagoTxt,saved); },900);
+}
+function successScreen(num,t,pagoTxt,saved){
+  document.getElementById('chat').style.display='none';
+  const s=document.getElementById('success'); s.style.display='flex';
+  document.getElementById('sc-num').textContent=num;
+  document.getElementById('sc-rows').innerHTML=''
+    +'<div class="prow"><span>Plano</span><b>'+PACOTES.find(p=>p.v===V.pacote).n+' · IS '+fmt0(V.lmi)+'</b></div>'
+    +'<div class="prow"><span>Assistência</span><b>'+RES.assist.find(a=>a.v===V.assist).n+(V.pet?' + '+RES.pet.find(p=>p.v===V.pet).n:'')+'</b></div>'
+    +'<div class="prow"><span>Pagamento</span><b>'+pagoTxt+'</b></div>'
+    +'<div class="prow tot"><span>Total mensal (com IOF)</span><b>'+fmt(t.total)+'</b></div>';
+  document.getElementById('sc-sub').innerHTML='Recebemos os seus dados, <b>'+esc(V.nome.split(' ')[0])+'</b>! '
+    +(V.pgto==='boleto'&&!V.paid?'Seu boleto foi emitido e também vai chegar no seu e-mail — <b>a cobertura inicia após a confirmação do pagamento</b> da 1ª parcela.':'Sua proposta está em análise — a apólice e as Condições Gerais chegam no seu e-mail.')
+    +(saved?'<br><br><b style="color:var(--neon)">Proposta vinculada ao seu CPF:</b> crie sua conta no site ou no app com os mesmos dados e ela aparece automaticamente na sua área do cliente.':'');
+  confete();
+  window.scrollTo(0,0);
+}
+function confete(){
+  const box=document.getElementById('confetti'); box.innerHTML='';
+  const cols=['#46EF80','#279989','#ffffff','#9ff5c0','#1fd1a3'];
+  for(let i=0;i<90;i++){
+    const c=document.createElement('i'); c.className='cf';
+    c.style.left=Math.random()*100+'vw';
+    c.style.background=cols[i%cols.length];
+    c.style.animationDuration=(2.4+Math.random()*2.2)+'s';
+    c.style.animationDelay=(Math.random()*0.9)+'s';
+    c.style.transform='rotate('+Math.random()*360+'deg)';
+    box.appendChild(c);
+  }
+  setTimeout(()=>{ box.innerHTML=''; },5600);
+}
+
+/* ---------- Cérebro de perguntas livres ---------- */
+const KB=[
+  {k:/seguro|lgpd|dado|privacid|confi/i,a:'Pode ficar tranquilo(a)! 🔒 Esta conversa é protegida: seus dados são <b>criptografados</b>, tratados conforme a <b>LGPD</b> e usados só para a sua cotação. E a simulação é <b>gratuita e sem compromisso</b> — você só contrata se quiser.'},
+  {k:/iof/i,a:'O <b>IOF</b> é um imposto federal de <b>7,38%</b> sobre o prêmio do seguro residencial. Aqui ele aparece <b>detalhado no resumo</b> antes de você confirmar — sem surpresa. 😉'},
+  {k:/franquia|p\.o\.s|pos\b/i,a:'A <b>franquia</b> é a sua participação nos prejuízos em caso de sinistro. Você escolhe: <b>Isenta</b> (sem participação), <b>Reduzida</b>, <b>Padrão</b> ou <b>Agravada</b> (mais barata). Algumas coberturas têm P.O.S conforme as Condições Gerais.'},
+  {k:/cancel/i,a:'Sem fidelidade por aqui! Você pode <b>cancelar quando quiser</b> pela área do cliente, com devolução proporcional quando aplicável. 💚'},
+  {k:/pag|cart[ãa]o|pix|boleto|parcel/i,a:'Você pode pagar com <b>cartão de crédito</b> (até 12x sem juros), <b>Débito/PIX Automático</b> mensal ou <b>boleto</b> (à vista ou parcelado). O IOF já vem detalhado no resumo.'},
+  {k:/assist[êe]ncia|chaveiro|encanador|eletricista/i,a:'A <b>assistência 24h</b> cobre serviços do dia a dia: chaveiro, encanador, eletricista, desentupimento, vidraceiro e mais — em três planos: <b>Essencial</b> (R$ 9,90), <b>Proteção</b> (R$ 16,90) e <b>Conforto+</b> (R$ 24,90).'},
+  {k:/pet|cachorro|gato|animal/i,a:'Temos assistência <b>pet</b> opcional: <b>Sossego</b> (R$ 12,90), <b>Conforto</b> (R$ 19,90) e <b>Total</b> (R$ 29,90) — com telemedicina veterinária, urgência, transporte e mais. 🐾'},
+  {k:/cobertura|cobre|incêndio|roubo|alagamento|vendaval|raio/i,a:'O plano <b>Essencial</b> cobre incêndio/raio/explosão, vendaval e granizo, danos elétricos, alagamento e tubulações. O <b>Intermediário</b> soma roubo com arrombamento e RC Familiar. O <b>Ampliada</b> adiciona vidros, bicicletas, danos morais e mais.'},
+  {k:/vig[êe]ncia|come[çc]a|valer|prazo/i,a:'A cobertura começa <b>após a aceitação da proposta e o pagamento da 1ª parcela</b>. A apólice digital chega no seu e-mail assim que isso acontece. 📩'},
+  {k:/susep|regulad/i,a:'Sim! A Você Seguradora é <b>regulada pela SUSEP</b>, o órgão que fiscaliza seguros no Brasil, e segue as Condições Gerais registradas do produto.'},
+  {k:/pre[çc]o|valor|quanto custa|caro/i,a:'O preço depende do valor protegido (Importância Segurada), do plano e das suas respostas — proteções como alarme e portaria podem <b>baixar o preço</b>. Segue o fluxo comigo que te mostro o valor exato em instantes! 😉'},
+  {k:/humano|atendente|pessoa|falar com/i,a:'Claro! Você pode falar com o nosso time agora no WhatsApp: <b><a href="https://wa.me/5511930549424" target="_blank" rel="noopener" style="color:var(--neon)">clique aqui para conversar</a></b>. E eu continuo por aqui se precisar. 💚'},
+];
+function vicBrain(q){
+  for(const item of KB){ if(item.k.test(q))return item.a; }
+  return 'Boa pergunta! 🤔 Essa eu prefiro que nosso time responda direitinho: <b><a href="https://wa.me/5511930549424" target="_blank" rel="noopener" style="color:var(--neon)">fale com um especialista</a></b>. Enquanto isso, seguimos com a sua cotação — é só tocar em uma das opções acima. 😉'
+}
+function freeAsk(txt){
+  if(!txt.trim())return;
+  meSay(txt);
+  document.getElementById('chat-in').value='';
+  vicSay(vicBrain(txt));
+}
+
+/* ---------- Bindings ---------- */
+document.getElementById('go-res').onclick=startChat;
+document.getElementById('chat-exit').onclick=()=>{ if(confirm('Sair da conversa? Sua cotação em andamento será perdida.')){ document.getElementById('chat').style.display='none'; document.getElementById('welcome').style.display='flex'; window.scrollTo(0,0); } };
+document.getElementById('chat-send').onclick=()=>freeAsk(document.getElementById('chat-in').value);
+document.getElementById('chat-in').addEventListener('keydown',e=>{ if(e.key==='Enter')freeAsk(e.target.value); });
+document.querySelectorAll('.qa').forEach(b=>{ b.onclick=()=>{ if(b.dataset.q==='humano'){ meSay('Falar com atendente'); vicSay(vicBrain('humano')); } else { meSay('É seguro?'); vicSay(vicBrain('seguro')); } }; });
+document.getElementById('sc-again').onclick=()=>{ document.getElementById('success').style.display='none'; startChat(); };
+</script>
+
+
+
+
+</body>
+</html>
