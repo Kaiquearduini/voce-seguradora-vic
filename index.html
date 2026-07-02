@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="vic-build" content="v1.9">
+<meta name="vic-build" content="v2.0">
 <title>Vic — Contrate seu seguro por conversa | Você Seguradora</title>
 <meta name="description" content="Converse com a Vic, a assistente da Você Seguradora, e contrate seu seguro residencial em minutos. Simples, seguro e 100% digital.">
 <meta name="theme-color" content="#001a23">
@@ -290,6 +290,31 @@ img{display:block;max-width:100%}
   .fcard,.pcard{max-width:470px}
 }
 .crail img{height:250px;margin:4px auto 0;filter:drop-shadow(0 16px 30px rgba(0,36,48,.18))}
+
+/* ===== DESKTOP CHATMODE: moldura escura navy→verde (identidade Área do Cliente) ===== */
+@media(min-width:1100px){
+  body.chatmode .bg{background:
+    radial-gradient(900px 540px at 88% -8%, rgba(70,239,128,.16), transparent 60%),
+    radial-gradient(760px 520px at -8% 112%, rgba(39,153,137,.20), transparent 55%),
+    linear-gradient(115deg,#03161e 0%,#052733 42%,#0a4b46 78%,#15805a 112%)}
+  body.chatmode .bg::before{background-image:radial-gradient(rgba(255,255,255,.055) 1px,transparent 1px)}
+  body.chatmode .bg .vmark{opacity:.05}
+  /* painel branco apenas sob a coluna da conversa */
+  body.chatmode .chat.show{background:linear-gradient(#fff,#fff) right/calc(100% - 330px) 100% no-repeat;box-shadow:0 34px 90px rgba(0,10,15,.45)}
+  /* rail lateral vira vidro escuro */
+  body.chatmode .crail{background:rgba(255,255,255,.045);backdrop-filter:blur(10px);border-right:1px solid rgba(255,255,255,.10)}
+  body.chatmode .crail img{filter:drop-shadow(0 22px 44px rgba(0,0,0,.5))}
+  body.chatmode .rl-card{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.15);box-shadow:none}
+  body.chatmode .rl-card>b{color:#fff}
+  body.chatmode .rl-row{color:#b9d4d2;border-bottom-color:rgba(255,255,255,.16)}
+  body.chatmode .rl-row b{color:#fff}
+  body.chatmode .rl-row.tot b{color:var(--neon)}
+  body.chatmode .rl-empty{color:#9fc3bf}
+  body.chatmode .rl-trust{color:#b9d4d2}
+  body.chatmode .rl-trust svg{color:var(--neon)}
+  /* rodapé do input funde com o painel branco */
+  body.chatmode .c-foot{background:linear-gradient(180deg,transparent,rgba(255,255,255,.96) 26%)}
+}
 .rl-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:0 10px 26px rgba(0,36,48,.07)}
 .rl-card>b{display:block;font-size:13px;font-weight:800;color:var(--navy);margin-bottom:9px}
 .rl-row{display:flex;justify-content:space-between;gap:10px;font-size:12px;color:var(--txt2);padding:6px 0;border-bottom:1px dashed var(--line)}
@@ -635,6 +660,7 @@ function startChat(){
   document.getElementById('welcome').style.display='none';
   document.getElementById('success').style.display='none';
   document.getElementById('chat').classList.add('show');
+  document.body.classList.add('chatmode');
   stream().innerHTML=''; resetV(); setStep(0);
   window.scrollTo(0,0);
   const h=new Date().getHours(); const sauda=h<12?'Bom dia':(h<18?'Boa tarde':'Boa noite');
@@ -1043,6 +1069,7 @@ async function pagoOk(){
 }
 function successScreen(num,t,pagoTxt,saved){
   document.getElementById('chat').classList.remove('show');
+  document.body.classList.remove('chatmode');
   const s=document.getElementById('success'); s.style.display='flex';
   document.getElementById('sc-num').textContent=num;
   document.getElementById('sc-rows').innerHTML=''
@@ -1099,7 +1126,7 @@ function freeAsk(txt){
 
 /* ---------- Bindings ---------- */
 document.getElementById('go-res').onclick=startChat;
-document.getElementById('chat-exit').onclick=()=>{ if(confirm('Sair da conversa? Sua cotação em andamento será perdida.')){ document.getElementById('chat').classList.remove('show'); document.getElementById('welcome').style.display='flex'; window.scrollTo(0,0); } };
+document.getElementById('chat-exit').onclick=()=>{ if(confirm('Sair da conversa? Sua cotação em andamento será perdida.')){ document.body.classList.remove('chatmode'); document.getElementById('chat').classList.remove('show'); document.getElementById('welcome').style.display='flex'; window.scrollTo(0,0); } };
 document.getElementById('chat-send').onclick=()=>freeAsk(document.getElementById('chat-in').value);
 document.getElementById('chat-in').addEventListener('keydown',e=>{ if(e.key==='Enter')freeAsk(e.target.value); });
 document.querySelectorAll('.qa').forEach(b=>{ b.onclick=()=>{ if(b.dataset.q==='humano'){ meSay('Falar com atendente'); vicSay(vicBrain('humano')); } else { meSay('É seguro?'); vicSay(vicBrain('seguro')); } }; });
