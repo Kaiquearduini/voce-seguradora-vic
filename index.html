@@ -3,8 +3,8 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="vic-build" content="v2.21">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,interactive-widget=resizes-content">
+<meta name="vic-build" content="v2.22">
 <title>Vic — Contrate seu seguro por conversa | Você Seguradora</title>
 <meta name="description" content="Converse com a Vic, a assistente da Você Seguradora, e contrate seu seguro residencial em minutos. Simples, seguro e 100% digital.">
 <meta name="theme-color" content="#001a23">
@@ -639,6 +639,7 @@ function askForm(title,sub,fieldsHTML,btn,onSubmit,icon){
     +'<div class="fnote"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8-7 9-4-1-7-4.5-7-9V6z"/></svg>Seus dados estão protegidos pela LGPD</div>';
   stream().appendChild(d); scrollEnd();
   d.querySelector('#fgo').onclick=()=>onSubmit(d);
+  d.querySelectorAll('input').forEach(inp=>{ inp.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); d.querySelector('#fgo').click(); } }); });
   const f=d.querySelector('input'); if(f)setTimeout(()=>f.focus(),150);
   return d;
 }
@@ -742,7 +743,7 @@ function qPerfil(){ saveV('qPerfil');
 }
 function qCEP(){ saveV('qCEP');
   askForm('Localização do imóvel','Digite o CEP do imóvel a ser segurado',
-    '<div class="ff"><label for="f-cep">CEP</label><input id="f-cep" inputmode="numeric" placeholder="00000-000"><div class="fer"></div></div>',
+    '<div class="ff"><label for="f-cep">CEP</label><input id="f-cep" inputmode="numeric" autocomplete="postal-code" placeholder="00000-000"><div class="fer"></div></div>',
     'Buscar endereço',async d=>{
       clearErrs(d);
       const cep=digits(d.querySelector('#f-cep').value);
@@ -767,14 +768,24 @@ function qCEP(){ saveV('qCEP');
         });
       });
     },'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-5.3-7-11a7 7 0 0114 0c0 5.7-7 11-7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>');
+  setTimeout(()=>{
+    const d=document.getElementById('ask'); if(!d)return;
+    const i=d.querySelector('#f-cep'); if(!i)return;
+    maskCEP(i);
+    i.addEventListener('input',()=>{
+      const n=digits(i.value).length;
+      if(n===8&&!i._auto){ i._auto=true; setTimeout(()=>{ const g=d.querySelector('#fgo'); if(g&&g.textContent!=='Buscando…')g.click(); },300); }
+      else if(n<8){ i._auto=false; }
+    });
+  },120);
 }
 function elegIntro(){ vicSay('Ótimo! Agora, <b>'+RES.eleg.length+' perguntinhas rápidas de segurança</b> — fazem parte da análise do seguro, tá? 😉',()=>{ V.elegIdx=0; qEleg(); }); }
 function enderecoManual(){
   askForm('Endereço do imóvel','Preencha os dados do endereço',
-    '<div class="ff"><label for="m-rua">Endereço (rua, avenida…)</label><input id="m-rua" placeholder="Ex.: Rua das Flores"><div class="fer"></div></div>'
+    '<div class="ff"><label for="m-rua">Endereço (rua, avenida…)</label><input id="m-rua" autocomplete="address-line1" placeholder="Ex.: Rua das Flores"><div class="fer"></div></div>'
     +'<div class="ff"><label for="m-bai">Bairro</label><input id="m-bai"><div class="fer"></div></div>'
-    +'<div class="frow"><div class="ff"><label for="m-cid">Cidade</label><input id="m-cid"><div class="fer"></div></div>'
-    +'<div class="ff"><label for="m-uf">Estado (UF)</label><input id="m-uf" maxlength="2" style="text-transform:uppercase" placeholder="SP"><div class="fer"></div></div></div>',
+    +'<div class="frow"><div class="ff"><label for="m-cid">Cidade</label><input id="m-cid" autocomplete="address-level2"><div class="fer"></div></div>'
+    +'<div class="ff"><label for="m-uf">Estado (UF)</label><input id="m-uf" maxlength="2" autocomplete="address-level1" style="text-transform:uppercase" placeholder="SP"><div class="fer"></div></div></div>',
     'Confirmar endereço →',d=>{
       clearErrs(d); let ok=true;
       const rua=d.querySelector('#m-rua').value.trim(), bai=d.querySelector('#m-bai').value.trim();
@@ -956,12 +967,12 @@ function qDados(){ saveV('qDados');
 function qEndereco(){ saveV('qEndereco');
   const a=V.addr||{};
   askForm('Endereço do imóvel','Confirme e complete com o número',
-    '<div class="ff"><label for="f-rua">Endereço</label><input id="f-rua" value="'+esc(a.logradouro||'')+'" placeholder="Rua, avenida…"><div class="fer"></div></div>'
+    '<div class="ff"><label for="f-rua">Endereço</label><input id="f-rua" autocomplete="address-line1" value="'+esc(a.logradouro||'')+'" placeholder="Rua, avenida…"><div class="fer"></div></div>'
     +'<div class="frow"><div class="ff"><label for="f-num">Número</label><input id="f-num" inputmode="numeric" placeholder="Nº"><div class="fer"></div></div>'
     +'<div class="ff"><label for="f-comp">Complemento</label><input id="f-comp" placeholder="Apto, bloco…"><div class="fer"></div></div></div>'
     +'<div class="ff"><label for="f-bai">Bairro</label><input id="f-bai" value="'+esc(a.bairro||'')+'"><div class="fer"></div></div>'
-    +'<div class="frow"><div class="ff"><label for="f-cid">Cidade</label><input id="f-cid" value="'+esc(a.localidade||'')+'"><div class="fer"></div></div>'
-    +'<div class="ff"><label for="f-uf">Estado</label><input id="f-uf" maxlength="2" value="'+esc(a.uf||'')+'" style="text-transform:uppercase"><div class="fer"></div></div></div>',
+    +'<div class="frow"><div class="ff"><label for="f-cid">Cidade</label><input id="f-cid" autocomplete="address-level2" value="'+esc(a.localidade||'')+'"><div class="fer"></div></div>'
+    +'<div class="ff"><label for="f-uf">Estado</label><input id="f-uf" maxlength="2" autocomplete="address-level1" value="'+esc(a.uf||'')+'" style="text-transform:uppercase"><div class="fer"></div></div></div>',
     'Confirmar endereço →',d=>{
       clearErrs(d); let ok=true;
       const rua=d.querySelector('#f-rua').value.trim(), num=d.querySelector('#f-num').value.trim();
@@ -1067,11 +1078,11 @@ function openCheckout(valor){
     +'<div style="display:flex;align-items:center;gap:10px;margin-bottom:16px"><span style="width:38px;height:38px;border-radius:11px;background:linear-gradient(135deg,#279989,#0a4b46);display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" fill="none" style="width:20px;height:20px"><path d="M4 4l7 16h2L20 4h-3.5L12 15.5 7.5 4z" fill="#fff"/></svg></span><div><b style="font-size:14px">Você Seguradora Pay</b><div style="font-size:11.5px;color:#6b8891">Seguro Residencial · '+(V.parcelas===1?'à vista':V.parcelas+'x sem juros')+'</div></div></div>'
     +'<div style="text-align:center;background:#f2fbf6;border:1px solid rgba(39,153,137,.25);border-radius:14px;padding:12px;margin-bottom:8px"><div style="font-size:11px;font-weight:800;letter-spacing:.08em;color:#1c7568;text-transform:uppercase">Valor a pagar</div><div style="font-size:28px;font-weight:900;color:#0b2530">'+fmt(valor)+'</div></div>'
     +'<div style="text-align:center;font-size:10.5px;color:#8aa4ab;margin-bottom:14px">Aceitamos Visa · Mastercard · Elo · Amex · Hipercard</div>'
-    +'<div style="margin-bottom:11px"><label style="display:block;font-size:10.5px;font-weight:800;letter-spacing:.08em;color:#41626b;text-transform:uppercase;margin-bottom:5px">Número do cartão</label><input id="ck-num" inputmode="numeric" placeholder="0000 0000 0000 0000" style="width:100%;border:1.5px solid #d7e4e7;border-radius:11px;padding:12px 13px;font-size:16px;color:#0b2530"></div>'
-    +'<div style="margin-bottom:11px"><label style="display:block;font-size:10.5px;font-weight:800;letter-spacing:.08em;color:#41626b;text-transform:uppercase;margin-bottom:5px">Nome impresso no cartão</label><input id="ck-nome" placeholder="Como está no cartão" style="width:100%;border:1.5px solid #d7e4e7;border-radius:11px;padding:12px 13px;font-size:16px;color:#0b2530"></div>'
+    +'<div style="margin-bottom:11px"><label style="display:block;font-size:10.5px;font-weight:800;letter-spacing:.08em;color:#41626b;text-transform:uppercase;margin-bottom:5px">Número do cartão</label><input id="ck-num" inputmode="numeric" autocomplete="cc-number" placeholder="0000 0000 0000 0000" style="width:100%;border:1.5px solid #d7e4e7;border-radius:11px;padding:12px 13px;font-size:16px;color:#0b2530"></div>'
+    +'<div style="margin-bottom:11px"><label style="display:block;font-size:10.5px;font-weight:800;letter-spacing:.08em;color:#41626b;text-transform:uppercase;margin-bottom:5px">Nome impresso no cartão</label><input id="ck-nome" autocomplete="cc-name" placeholder="Como está no cartão" style="width:100%;border:1.5px solid #d7e4e7;border-radius:11px;padding:12px 13px;font-size:16px;color:#0b2530"></div>'
     +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">'
-    +'<div><label style="display:block;font-size:10.5px;font-weight:800;letter-spacing:.08em;color:#41626b;text-transform:uppercase;margin-bottom:5px">Validade</label><input id="ck-val" inputmode="numeric" placeholder="MM/AA" style="width:100%;border:1.5px solid #d7e4e7;border-radius:11px;padding:12px 13px;font-size:16px;color:#0b2530"></div>'
-    +'<div><label style="display:block;font-size:10.5px;font-weight:800;letter-spacing:.08em;color:#41626b;text-transform:uppercase;margin-bottom:5px">CVV</label><input id="ck-cvv" inputmode="numeric" placeholder="123" maxlength="4" style="width:100%;border:1.5px solid #d7e4e7;border-radius:11px;padding:12px 13px;font-size:16px;color:#0b2530"></div></div>'
+    +'<div><label style="display:block;font-size:10.5px;font-weight:800;letter-spacing:.08em;color:#41626b;text-transform:uppercase;margin-bottom:5px">Validade</label><input id="ck-val" inputmode="numeric" autocomplete="cc-exp" placeholder="MM/AA" style="width:100%;border:1.5px solid #d7e4e7;border-radius:11px;padding:12px 13px;font-size:16px;color:#0b2530"></div>'
+    +'<div><label style="display:block;font-size:10.5px;font-weight:800;letter-spacing:.08em;color:#41626b;text-transform:uppercase;margin-bottom:5px">CVV</label><input id="ck-cvv" inputmode="numeric" autocomplete="cc-csc" placeholder="123" maxlength="4" style="width:100%;border:1.5px solid #d7e4e7;border-radius:11px;padding:12px 13px;font-size:16px;color:#0b2530"></div></div>'
     +'<button id="ck-pay" style="width:100%;background:linear-gradient(135deg,#279989,#1c7568);color:#fff;font-weight:800;font-size:15px;border-radius:13px;padding:14px;box-shadow:0 10px 24px rgba(39,153,137,.35)">Pagar '+fmt(valor)+'</button>'
     +'<button id="ck-x" style="width:100%;margin-top:9px;color:#6b8891;font-size:13px;font-weight:600">Voltar para a conversa</button>'
     +'<div style="display:flex;align-items:center;justify-content:center;gap:6px;font-size:10.5px;color:#8aa4ab;margin-top:11px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>Pagamento criptografado · Ambiente de demonstração</div>'
@@ -1414,6 +1425,7 @@ function showExitModal(){
 document.getElementById('chat-exit').onclick=showExitModal;
 document.getElementById('chat-send').onclick=()=>freeAsk(document.getElementById('chat-in').value);
 document.getElementById('chat-in').addEventListener('keydown',e=>{ if(e.key==='Enter')freeAsk(e.target.value); });
+document.getElementById('chat-in').addEventListener('focus',()=>{ setTimeout(scrollEnd,350); });
 document.querySelectorAll('.qa').forEach(b=>{ b.onclick=()=>{ if(b.dataset.q==='humano'){ meSay('Falar com atendente'); vicSay(vicBrain('humano')); } else { meSay('É seguro?'); vicSay(vicBrain('seguro')); } }; });
 document.getElementById('sc-again').onclick=()=>{ document.getElementById('success').style.display='none'; startChat(); };
 </script>
