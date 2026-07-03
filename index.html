@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="vic-build" content="v2.13">
+<meta name="vic-build" content="v2.15">
 <title>Vic — Contrate seu seguro por conversa | Você Seguradora</title>
 <meta name="description" content="Converse com a Vic, a assistente da Você Seguradora, e contrate seu seguro residencial em minutos. Simples, seguro e 100% digital.">
 <meta name="theme-color" content="#001a23">
@@ -169,6 +169,13 @@ img{display:block;max-width:100%}
 .chip .pr{color:var(--teal);font-weight:800;font-size:12.5px}
 .chip.on{border-color:var(--neon);background:rgba(70,239,128,.08)}
 .chip.rec{border-color:rgba(70,239,128,.55)}
+.chip .clst{display:flex;flex-direction:column;gap:5px;margin:6px 0 3px;padding-top:8px;border-top:1px dashed var(--line)}
+.chip .clst i{font-style:normal;font-size:12.5px;color:var(--txt2);display:flex;gap:8px;align-items:flex-start;line-height:1.4;text-align:left}
+.chip .clst em{font-style:normal;font-weight:900;color:var(--teal);flex-shrink:0;font-size:12px;line-height:1.5}
+.chip .clst em.all{color:var(--neon);text-shadow:0 0 6px rgba(70,239,128,.5)}
+.chip.haslist{align-items:flex-start}
+.chip.haslist .cic{margin-top:2px}
+.chip.haslist .pr{margin-top:4px;font-size:14px}
 .chips.rich{flex-direction:column;align-items:stretch}
 .chips.rich .chip{width:100%;max-width:470px}
 .chip.rec::after{content:"Recomendado";position:absolute;top:-9px;right:12px;font-size:9px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#01230f;background:var(--neon);border-radius:999px;padding:3px 9px;box-shadow:0 4px 10px rgba(70,239,128,.35)}
@@ -495,19 +502,19 @@ const RES={
     {v:'padrao',n:'Padrão',s:'Participação base do produto',fator:1.00,rec:true,ic:'check'},
     {v:'agravada',n:'Participação maior',s:'Preço menor na mensalidade',fator:0.95,ic:'down'}],
   assist:[
-    {v:'essencial',n:'Essencial',ic:'wrench',preco:9.90,s:'Chaveiro, encanador, eletricista, desentupimento, vidraceiro e help desk'},
-    {v:'protecao',n:'Proteção',ic:'tools',preco:16.90,s:'Tudo do Essencial + linha branca/marrom, luminárias, olho mágico e mais'},
-    {v:'conforto',n:'Conforto+',ic:'star',preco:24.90,s:'Tudo do Proteção + ar-condicionado, caçamba, suporte de TV e mais',rec:true}],
+    {v:'essencial',n:'Essencial',ic:'wrench',preco:9.90,s:'O básico bem-feito do dia a dia',det:['Chaveiro','Encanador','Eletricista','Desentupimento','Vidraceiro','Help desk']},
+    {v:'protecao',n:'Proteção',ic:'tools',preco:16.90,s:'Mais serviços para a casa toda',det:['Todos os serviços do Essencial','Linha branca e marrom','Instalação de luminárias/tomadas','Olho mágico','Serviços gerais','Verificação de vazamentos']},
+    {v:'conforto',n:'Conforto+',ic:'star',preco:24.90,s:'A experiência completa',rec:true,det:['Todos os serviços do Proteção','Limpeza de ar-condicionado','Caçamba','Suporte de TV','Instalação de telas','Descarte inteligente']}],
   pet:[
     {v:'',n:'Sem assistência pet',ic:'x',preco:0,s:'Você pode adicionar depois'},
-    {v:'pet_sossego',n:'Pet Sossego',ic:'paw',preco:12.90,s:'Telemedicina, urgência, transporte, funeral e hospedagem'},
-    {v:'pet_conforto',n:'Pet Conforto',ic:'paw',preco:19.90,s:'Tudo do Sossego + consulta eletiva, concierge, vacinas e exames'},
-    {v:'pet_total',n:'Pet Total',ic:'paw',preco:29.90,s:'Tudo do Conforto + exames de imagem'}]
+    {v:'pet_sossego',n:'Pet Sossego',ic:'paw',preco:12.90,s:'O essencial para emergências',det:['Telemedicina veterinária','Atendimento de urgência','Transporte do pet','Assistência funeral','Hospedagem em viagem']},
+    {v:'pet_conforto',n:'Pet Conforto',ic:'paw',preco:19.90,s:'Cuidado no dia a dia',det:['Tudo do Pet Sossego','Consulta eletiva','Concierge pet','Aplicação de vacinas','Exames laboratoriais']},
+    {v:'pet_total',n:'Pet Total',ic:'paw',preco:29.90,s:'Cobertura máxima',det:['Tudo do Pet Conforto','Exames de imagem (raio-X e ultrassom)']}]
 };
 const PACOTES=[
-  {v:'basico',n:'Essencial',ic:'shield',cobs:[2,3,4,5],s:'Incêndio, vendaval, danos elétricos, alagamento e tubulações'},
-  {v:'intermediario',n:'Intermediário',ic:'shieldck',cobs:[2,3,4,5,9,11],s:'Tudo do Essencial + roubo com arrombamento e RC Familiar',rec:true},
-  {v:'completo',n:'Ampliada',ic:'star',cobs:[2,3,4,5,6,7,8,9,10,11,12,14,15,18],s:'Tudo do Intermediário + vidros, bicicletas, danos morais e mais'}];
+  {v:'basico',n:'Essencial',ic:'shield',cobs:[2,3,4,5],s:'Incêndio, vendaval, danos elétricos, alagamento e tubulações',det:['Incêndio, raio, explosão e fumaça','Vendaval, granizo e furacão','Danos elétricos','Alagamento e inundação','Ruptura de tubulações']},
+  {v:'intermediario',n:'Intermediário',ic:'shieldck',cobs:[2,3,4,5,9,11],s:'Tudo do Essencial + roubo com arrombamento e RC Familiar',rec:true,det:['Todas as coberturas do Essencial','Roubo e subtração com arrombamento','Responsabilidade Civil Familiar']},
+  {v:'completo',n:'Ampliada',ic:'star',cobs:[2,3,4,5,6,7,8,9,10,11,12,14,15,18],s:'Tudo do Intermediário + vidros, bicicletas, danos morais e mais',det:['Todas as coberturas do Intermediário','Quebra de vidros e impacto de veículos','Roubo de bicicletas','RC danos morais','Despesas extraordinárias e desmoronamento']}];
 
 /* Estado da conversa */
 let V={};
@@ -606,7 +613,9 @@ function askChips(opts,onPick,multi){
   let updGo=function(){};
   opts.forEach(o=>{
     const b=document.createElement('button'); b.className='chip'+(o.rec?' rec':'');
-    b.innerHTML=(o.ic&&ICO[o.ic]?'<span class="cic">'+ICO[o.ic]+'</span>':'')+'<span class="ctx"><b>'+o.n+'</b>'+(o.s?'<span>'+o.s+'</span>':'')+(o.pr?'<span class="pr">'+o.pr+'</span>':'')+'</span>';
+    var lst=o.list?'<span class="clst">'+o.list.map(function(it,ix){return '<i>'+(ix===0&&it.indexOf('Tod')===0?'<em class="all">★</em>':'<em>✓</em>')+esc(it)+'</i>';}).join('')+'</span>':'';
+    b.innerHTML=(o.ic&&ICO[o.ic]?'<span class="cic">'+ICO[o.ic]+'</span>':'')+'<span class="ctx"><b>'+o.n+'</b>'+(o.s?'<span>'+o.s+'</span>':'')+lst+(o.pr?'<span class="pr">'+o.pr+'</span>':'')+'</span>';
+    if(o.list)b.classList.add('haslist');
     b.onclick=()=>{ if(multi){ if(o.v==='__none'){ sel.clear(); box.querySelectorAll('.chip').forEach(c=>c.classList.remove('on')); b.classList.add('on'); } else { b.classList.toggle('on'); if(b.classList.contains('on'))sel.add(o.v); else sel.delete(o.v); const none=box.querySelector('[data-none]'); if(none)none.classList.remove('on'); } updGo(); return; }
       clearAsk(); LAST_IC=o.ic||''; onPick(o); };
     if(o.v==='__none')b.setAttribute('data-none','1');
@@ -854,7 +863,7 @@ function simular(){ saveV('simular');
   vicSay('Perfeito! Deixa comigo… 🧮 Estou <b>analisando seu perfil</b> e calculando as melhores opções pra você.',()=>{
     setTimeout(()=>{
       vicSay('Prontinho! ✨ Com base no que você me contou, aqui estão os <b>3 planos de cobertura</b> — do essencial ao mais completo. Toque em um pra escolher:',()=>{
-        askChips(PACOTES.map(p=>({v:p.v,n:p.n,s:p.s,ic:p.ic,pr:fmt(premioMensal(p.v,'padrao',null,''))+'/mês em coberturas',rec:p.rec})),o=>{
+        askChips(PACOTES.map(p=>({v:p.v,n:p.n,s:p.s,ic:p.ic,list:p.det,pr:fmt(premioMensal(p.v,'padrao',null,''))+'/mês em coberturas',rec:p.rec})),o=>{
           V.pacote=o.v; const p=PACOTES.find(x=>x.v===o.v); meSay('Plano '+p.n);
           vicSay('Boa escolha! 👏 Agora vamos deixar sua proteção completa: qual <b>plano de assistência 24h</b> você quer? São serviços do dia a dia — chaveiro, encanador, eletricista e mais.',qAssist);
         });
@@ -863,13 +872,13 @@ function simular(){ saveV('simular');
   });
 }
 function qAssist(){ saveV('qAssist');
-  askChips(RES.assist.map(a=>({v:a.v,n:a.n,s:a.s,ic:a.ic,pr:'+ '+fmt(a.preco)+'/mês',rec:a.rec})),o=>{
+  askChips(RES.assist.map(a=>({v:a.v,n:a.n,s:a.s,ic:a.ic,list:a.det,pr:'+ '+fmt(a.preco)+'/mês',rec:a.rec})),o=>{
     V.assist=o.v; meSay('Assistência '+o.n);
     vicSay('E pros <b>pets</b> da casa? 🐾 Temos assistência veterinária opcional:',qPet);
   });
 }
 function qPet(){ saveV('qPet');
-  askChips(RES.pet.map(p=>({v:p.v,n:p.n,s:p.s,ic:p.ic,pr:p.preco?('+ '+fmt(p.preco)+'/mês'):'Grátis'})),o=>{
+  askChips(RES.pet.map(p=>({v:p.v,n:p.n,s:p.s,ic:p.ic,list:p.det,pr:p.preco?('+ '+fmt(p.preco)+'/mês'):'Grátis'})),o=>{
     V.pet=o.v; meSay(o.n);
     vicSay('Última personalização: ⚖️ a <b>franquia</b> — sua participação em caso de sinistro. Quanto menor a franquia, um pouquinho maior o prêmio:',qFranquia);
   });
@@ -904,9 +913,9 @@ function resumo(){ saveV('resumo');
       vicSay('Claro! ✏️ O que você quer ajustar?',()=>{
         askChips([{v:'pac',n:'Pacote de coberturas',ic:'shield'},{v:'ass',n:'Assistência 24h',ic:'wrench'},{v:'pet',n:'Assistência pet',ic:'paw'},{v:'fra',n:'Franquia',ic:'minus'},{v:'lmi',n:'Valor protegido',ic:'coin'},{v:'imv',n:'Dados do imóvel',s:'Tipo, ocupação, perfil e CEP',ic:'house'}],o=>{
           meSay(o.n);
-          if(o.v==='pac'){ vicSay('Escolha o novo pacote:',()=>{ askChips(PACOTES.map(p2=>({v:p2.v,n:p2.n,s:p2.s,ic:p2.ic,pr:fmt(premioMensal(p2.v,V.franquia,null,''))+'/mês em coberturas',rec:p2.rec})),x=>{ V.pacote=x.v; meSay('Plano '+PACOTES.find(z=>z.v===x.v).n); resumo(); }); }); }
-          else if(o.v==='ass'){ vicSay('Escolha a nova assistência:',()=>{ askChips(RES.assist.map(a2=>({v:a2.v,n:a2.n,s:a2.s,ic:a2.ic,pr:'+ '+fmt(a2.preco)+'/mês',rec:a2.rec})),x=>{ V.assist=x.v; meSay('Assistência '+RES.assist.find(z=>z.v===x.v).n); resumo(); }); }); }
-          else if(o.v==='pet'){ vicSay('Escolha o plano pet:',()=>{ askChips(RES.pet.map(p2=>({v:p2.v,n:p2.n,s:p2.s,ic:p2.ic,pr:p2.preco?('+ '+fmt(p2.preco)+'/mês'):'Grátis'})),x=>{ V.pet=x.v; meSay(RES.pet.find(z=>z.v===x.v).n); resumo(); }); }); }
+          if(o.v==='pac'){ vicSay('Escolha o novo pacote:',()=>{ askChips(PACOTES.map(p2=>({v:p2.v,n:p2.n,s:p2.s,ic:p2.ic,list:p2.det,pr:fmt(premioMensal(p2.v,V.franquia,null,''))+'/mês em coberturas',rec:p2.rec})),x=>{ V.pacote=x.v; meSay('Plano '+PACOTES.find(z=>z.v===x.v).n); resumo(); }); }); }
+          else if(o.v==='ass'){ vicSay('Escolha a nova assistência:',()=>{ askChips(RES.assist.map(a2=>({v:a2.v,n:a2.n,s:a2.s,ic:a2.ic,list:a2.det,pr:'+ '+fmt(a2.preco)+'/mês',rec:a2.rec})),x=>{ V.assist=x.v; meSay('Assistência '+RES.assist.find(z=>z.v===x.v).n); resumo(); }); }); }
+          else if(o.v==='pet'){ vicSay('Escolha o plano pet:',()=>{ askChips(RES.pet.map(p2=>({v:p2.v,n:p2.n,s:p2.s,ic:p2.ic,list:p2.det,pr:p2.preco?('+ '+fmt(p2.preco)+'/mês'):'Grátis'})),x=>{ V.pet=x.v; meSay(RES.pet.find(z=>z.v===x.v).n); resumo(); }); }); }
           else if(o.v==='fra'){ vicSay('Escolha a franquia:',()=>{ askChips(RES.franquias.map(f2=>({v:f2.v,n:f2.n,s:f2.s,rec:f2.rec,ic:f2.ic})),x=>{ V.franquia=x.v; meSay(RES.franquias.find(z=>z.v===x.v).n); resumo(); }); }); }
           else if(o.v==='imv'){ vicSay('Claro! Vamos revisar os dados do imóvel — depois eu recalculo os planos pra você. 🏡',()=>{ setStep(0); qTipo(); }); }
           else { qLMI(); }
@@ -1139,6 +1148,7 @@ document.addEventListener('visibilitychange',()=>{
 async function saveProposta(status){
   if(V._propSaved)return V._propOk;
   V._propSaved=true;
+  if(!V.propNum)V.propNum='VS-'+Date.now().toString(36).toUpperCase().slice(-8);
   const t=totais(); const pagoTxt=pagoLabel();
   const pol={
     tipo:'Seguro Residencial',
@@ -1148,16 +1158,22 @@ async function saveProposta(status){
     pagamento:pagoTxt, status:(status||'ativa')
   };
   let ok=false;
-  if(SB){ try{ const r=await SB.from('guest_quotes').insert({cpf:V.cpf,email:V.email,phone:V.fone,tipo:pol.tipo,item:pol.item,preco:pol.preco,cobertura:pol.cobertura,pagamento:pol.pagamento,status:pol.status}); ok=!(r&&r.error); }catch(e){} }
+  if(SB){
+    const row={cpf:V.cpf,email:V.email,phone:V.fone,tipo:pol.tipo,item:pol.item,preco:pol.preco,cobertura:pol.cobertura,pagamento:pol.pagamento,status:pol.status};
+    try{ const r=await SB.from('guest_quotes').insert(Object.assign({numero:V.propNum},row)); ok=!(r&&r.error); }catch(e){}
+    if(!ok){ /* fallback: banco ainda sem a coluna numero */
+      try{ const r2=await SB.from('guest_quotes').insert(row); ok=!(r2&&r2.error); }catch(e){}
+    }
+  }
   V._propOk=ok; if(ok)track('proposta_registrada');
   return ok;
 }
 async function pagoOk(){
   const t=totais(); const pagoTxt=pagoLabel();
   vicSay('Enviando a sua proposta… 🚀',null,600);
-  const num='VS-'+Date.now().toString(36).toUpperCase().slice(-8);
   const saved=await saveProposta(V.pgto==='boleto'&&!V.paid?'aguardando pagamento':'ativa');
   clearSave(); track('conclusao_'+V.pgto);
+  const num=V.propNum;
   setTimeout(()=>{ successScreen(num,t,pagoTxt,saved); },900);
 }
 function successScreen(num,t,pagoTxt,saved){
