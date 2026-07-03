@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,interactive-widget=resizes-content">
-<meta name="vic-build" content="v2.23">
+<meta name="vic-build" content="v2.24">
 <title>Vic — Contrate seu seguro por conversa | Você Seguradora</title>
 <meta name="description" content="Converse com a Vic, a assistente da Você Seguradora, e contrate seu seguro residencial em minutos. Simples, seguro e 100% digital.">
 <meta name="theme-color" content="#001a23">
@@ -801,7 +801,7 @@ function enderecoManual(){
 }
 function qEleg(){ saveV('qEleg');
   const e=RES.eleg[V.elegIdx];
-  if(!e){ setStep(1); vicSay('Perfeito, tudo certo por aqui! ✅<br>Mais duas rapidinhas que ajudam a <b>calibrar o seu preço</b>:',qSolar); return; }
+  if(!e){ setStep(1); vicSay('Perguntas de segurança: concluídas! ✅<br>Agora só mais <b>3 rapidinhas sobre o imóvel</b> — elas calibram (e podem até <b>baixar</b>) o seu preço:',qSolar); return; }
   vicSay(e.q+'<br><span style="font-size:12px;color:var(--txt2)">'+e.s+'</span>',()=>{
     askChips([{v:'nao',n:'Não',ic:'x'},{v:'sim',n:'Sim',ic:'check'}],o=>{
       meSay(o.v==='sim'?'Sim':'Não');
@@ -988,18 +988,18 @@ function qEndereco(){ saveV('qEndereco');
       vicSay('Endereço confirmado! ✅ Falta pouco: como você prefere <b>pagar</b>?',qPgto);
     },'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>');
 }
+function anualTot(){ const t=totais(); return Math.round(t.total*100)/100*12; }
 function qPgto(){ saveV('qPgto');
-  const t0=totais(); const anual0=t0.total*12;
+  const t0=totais(); const anual0=anualTot();
   askChips([
     {v:'cartao',n:'Cartão de crédito',s:'Até 12x de '+fmt(anual0/12)+' sem juros · link seguro',ic:'card'},
     {v:'pix',n:'PIX',s:fmt(t0.total)+' agora (1ª mensalidade) · confirmação na hora',ic:'pix'},
-    {v:'boleto',n:'Boleto bancário',s:'À vista ou em até 4x sem juros · pague em qualquer banco',ic:'barcode'}],o=>{
+    {v:'boleto',n:'Boleto bancário',s:'À vista ou em até 12x sem juros · pague em qualquer banco',ic:'barcode'}],o=>{
     V.pgto=o.v; meSay(o.n);
     if(o.v==='pix'){ V.parcelas=12; confirmar(); return; }
-    vicSay('E em <b>quantas parcelas</b>? 🗓️',()=>{
-      const t=totais(); const anual=t.total*12;
-      const parc=(o.v==='boleto')?[1,2,3,4]:[1,3,6,12];
-      const ops=parc.map(n=>({v:n,n:(n===1?'À vista':n+'x sem juros'),s:(n===1?fmt(anual)+' uma única vez':fmt(anual/n)+' por parcela'),ic:(n===1?'coin':'calendar')}));
+    const anual=anualTot(); const mensal=Math.round(totais().total*100)/100;
+    vicSay('E em <b>quantas parcelas</b>? 🗓️<br><span style="font-size:12px;color:var(--txt2)">Total do seguro no ano: <b>'+fmt(anual)+'</b> — equivale ao seu mensal de <b>'+fmt(mensal)+'</b>.</span>',()=>{
+      const ops=[1,2,3,4,6,12].map(n=>({v:n,n:(n===1?'À vista':n+'x sem juros'),s:(n===1?fmt(anual)+' uma única vez':fmt(anual/n)+' por parcela'+(n===12?' (igual ao mensal)':'')),ic:(n===1?'coin':'calendar')}));
       askChips(ops,x=>{ V.parcelas=x.v; meSay(x.n); confirmar(); });
     });
   });
@@ -1043,7 +1043,7 @@ function confirmar(){ saveV('confirmar');
 
 /* ---------- Pagamento: CARTÃO via link seguro ---------- */
 function payCartao(){
-  const t=totais(); const valor=t.total*12/V.parcelas;
+  const t=totais(); const valor=anualTot()/V.parcelas;
   vicSay('Pra sua segurança, o pagamento com cartão acontece no nosso <b>ambiente seguro</b> — nunca digite dados de cartão dentro de um chat, tá? 😉🔒<br><br>E o combinado mais importante: <b>depois de pagar, volte aqui nesta conversa</b> e toque em <b>"Já realizei o pagamento ✓"</b> — é assim que eu emito a sua proposta. Fechado?',()=>{
     clearAsk();
     const d=document.createElement('div'); d.className='fcard'; d.id='ask';
@@ -1128,7 +1128,7 @@ function payPix(){
 }
 /* ---------- Pagamento: BOLETO emitido na conversa ---------- */
 function payBoleto(){
-  const t=totais(); const valor=t.total*12/V.parcelas;
+  const t=totais(); const valor=anualTot()/V.parcelas;
   const venc=new Date(); venc.setDate(venc.getDate()+5);
   const vencStr=('0'+venc.getDate()).slice(-2)+'/'+('0'+(venc.getMonth()+1)).slice(-2)+'/'+venc.getFullYear();
   function g(n){let o='';for(let i=0;i<n;i++)o+=Math.floor(Math.random()*10);return o;}
@@ -1253,10 +1253,10 @@ const KB=[
   {k:/meu cpf|precisa do cpf|pedir cpf|pra que o cpf|por que o cpf|pq o cpf/,a:'Seu <b>CPF</b> serve para duas coisas: emitir a proposta em seu nome (exigência de todo seguro) e <b>vincular a contratação à sua conta</b> — com ele, o seguro aparece automaticamente na sua área do cliente no site e no app. 🔒 Tudo conforme a <b>LGPD</b>: usamos só para a proposta, nunca para spam.'},
   {k:/termos e condicoes|condicoes gerais|onde leio|contrato do seguro|clausulas/,a:'As <b>Condições Gerais</b> são o contrato completo do seguro — todas as regras, coberturas e exclusões em detalhe. 📄 Você recebe o documento com a apólice <b>no seu e-mail</b> após contratar, e ele fica disponível na <b>área do cliente</b>. Quer saber algo específico antes de fechar? Me pergunta que eu te adianto!'},
   /* — Pagamento — */
-  {k:/boleto|compensa/,a:'O <b>boleto</b> pode ser pago em qualquer banco ou app, em até <b>12x</b> (1 a 4 sem juros; de 5 a 12 com juros). Só lembra: a <b>compensação bancária leva até 3 dias úteis</b> — a cobertura inicia após a confirmação do pagamento da 1ª parcela. 🧾'},
+  {k:/boleto|compensa/,a:'O <b>boleto</b> pode ser pago em qualquer banco ou app, em até <b>12x sem juros</b>. Só lembra: a <b>compensação bancária leva até 3 dias úteis</b> — a cobertura inicia após a confirmação do pagamento da 1ª parcela. 🧾'},
   {k:/\bpix\b|debito automatico/,a:'Temos <b>Débito/PIX Automático</b> mensal em até <b>12x sem juros</b> — a parcela sai sozinha todo mês, sem você precisar lembrar. E no PIX à vista a confirmação é na hora! ⚡'},
-  {k:/cartao|credito|parcel|12x|juros/,a:'No <b>cartão de crédito</b> você parcela em até <b>12x sem juros</b>. Também aceito Débito/PIX Automático (12x sem juros) e boleto (1–4x sem juros; 5–12x com juros). O IOF já vem detalhado no resumo. 💳'},
-  {k:/\bpag(o|a|amento|ar)/,a:'Formas de pagamento: <b>cartão de crédito</b> (até 12x sem juros), <b>Débito/PIX Automático</b> (até 12x sem juros) e <b>boleto</b> (1–4x sem juros; 5–12x com juros). A cobertura começa após o pagamento da 1ª parcela. 😉'},
+  {k:/cartao|credito|parcel|12x|juros/,a:'No <b>cartão de crédito</b> você parcela em até <b>12x sem juros</b>. Também aceito PIX (mensal) e boleto (até 12x sem juros). O IOF já vem detalhado no resumo. 💳'},
+  {k:/\bpag(o|a|amento|ar)/,a:'Formas de pagamento: <b>cartão de crédito</b> (até 12x sem juros), <b>PIX</b> (mensal, 1ª agora) e <b>boleto</b> (até 12x sem juros). A cobertura começa após o pagamento da 1ª parcela. 😉'},
   {k:/\biof\b/,a:'O <b>IOF</b> é um imposto federal de <b>7,38%</b> sobre o prêmio do seguro residencial. Aqui ele aparece <b>detalhado no resumo</b> antes de você confirmar — sem surpresa. 😉'},
 
   /* — Coberturas específicas — */
