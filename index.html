@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="vic-build" content="v2.17">
+<meta name="vic-build" content="v2.18">
 <title>Vic — Contrate seu seguro por conversa | Você Seguradora</title>
 <meta name="description" content="Converse com a Vic, a assistente da Você Seguradora, e contrate seu seguro residencial em minutos. Simples, seguro e 100% digital.">
 <meta name="theme-color" content="#001a23">
@@ -1292,7 +1292,7 @@ const KB=[
 function vicBrain(q){
   const n=q.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
   for(const item of KB){ if(item.k.test(n))return item.a; }
-  return 'Boa pergunta! 🤔 Essa eu prefiro que nosso time responda direitinho: <b><a href="https://wa.me/5511930549424" target="_blank" rel="noopener" style="color:var(--teal)">fale com um especialista</a></b>. Enquanto isso, seguimos com a sua cotação — é só tocar em uma das opções acima. 😉'
+  return 'Boa pergunta! 🤔 Essa eu prefiro que nosso time responda direitinho: <b><a href="https://wa.me/5511930549424" target="_blank" rel="noopener" style="color:var(--teal)">fale com um especialista</a></b>. Enquanto isso, seguimos com a sua cotação — é só tocar em uma das opções aqui embaixo. 😉'
 }
 function copyText(txt,btn,okLabel){
   const orig=btn.textContent;
@@ -1303,6 +1303,37 @@ function copyText(txt,btn,okLabel){
     if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).then(done,()=>{ legacy()?done():fail(); }); }
     else { legacy()?done():fail(); }
   }catch(e){ legacy()?done():fail(); }
+}
+const CTX_HELP={
+  qTipo:'Aqui eu só quero saber o formato do imóvel: <b>apartamento</b> ou <b>casa</b>, e se fica <b>em condomínio</b> (com portaria e áreas comuns) ou não. Isso ajusta a análise e o preço. 😉',
+  qOcup:'@o que é veraneio',
+  qPerfil:'Quero saber a sua relação com o imóvel: você é <b>dono(a)</b> ou mora de <b>aluguel (inquilino)</b>? Os dois podem contratar — só muda o enquadramento da proposta. 🔑',
+  qCEP:'O <b>CEP</b> me diz onde o imóvel fica — a localização faz parte da análise e do preço. Se não souber de cabeça, dá pra achar no site dos Correios buscando pelo endereço! 📍',
+  qSolar:'@placa solar tem cobertura',
+  qSin:'@o que é sinistro',
+  qProt:'São os <b>equipamentos de segurança</b> do imóvel — grades, alarme, câmeras (CFTV), portaria e afins. Cada um reduz o risco, então pode <b>baixar o seu preço</b>! 🛡️ Marca os que existem aí; se não tiver nenhum, toca em "Nenhuma dessas".',
+  qLMI:'@como calcular o valor da importancia segurada',
+  simular:'São os <b>3 pacotes de cobertura</b> — cada card mostra exatamente o que fica protegido. O Essencial cobre o básico bem-feito, e cada nível acima soma proteções. Toca no que combina com você (e dá pra ajustar depois, prometo!). ✨',
+  qAssist:'A <b>assistência 24h</b> são serviços do dia a dia — chaveiro, encanador, eletricista e mais — que você aciona quando precisar. 🔧 Cada card lista o que inclui. É opcional e soma no valor mensal.',
+  qPet:'É a <b>assistência veterinária</b> opcional para os pets da casa — telemedicina, urgência, transporte e mais, conforme o plano. 🐾 Se não quiser, é só tocar em "Sem assistência pet".',
+  qFranquia:'@o que é franquia',
+  resumo:'Esse é o <b>resumo da sua proteção</b>: tudo o que você escolheu, com o preço aberto (valor do seguro + IOF). Se algo não ficou como você queria, toca em <b>Ajustar</b> — dá pra mudar qualquer item. 🎯',
+  qDados:'@por que voce precisa do meu cpf',
+  qEndereco:'É só confirmar o <b>endereço do imóvel segurado</b> — eu já preenchi com o CEP que você me passou, falta o número (e complemento, se tiver). 🏠',
+  qPgto:'Aqui você escolhe <b>como pagar</b>: cartão de crédito (link seguro, até 12x sem juros), PIX ou boleto. Qualquer forma emite a mesma proposta! 💳',
+  confirmar:'É a <b>revisão final</b> antes do pagamento: confere seus dados, o plano e o valor. Marcando a caixinha dos Termos, é só seguir — as Condições Gerais completas chegam no seu e-mail. ✅'
+};
+function ctxHelp(){
+  if(V.resume==='qEleg'){
+    const e=RES.eleg[V.elegIdx];
+    if(e){ const seed={compart:'o que é moradia coletiva',construcao:'o que é palafita',rural:'o que é zona rural'}[e.k]; if(seed)return vicBrain(seed); }
+  }
+  const v=CTX_HELP[V.resume];
+  if(!v)return null;
+  return v.charAt(0)==='@'?vicBrain(v.slice(1)):v;
+}
+function isConfusion(nt){
+  return /^(o ?que e isso|oque e isso|que e isso|o que significa( isso)?|o que quer dizer( isso)?|nao entendi|n entendi|como assim|explica( melhor| isso)?|me explica|hein\??|\?+|nao sei( o que e isso)?|em que sentido|nao compreendi|traduz|fala mais|detalha)$/.test(nt);
 }
 function tryChipMatch(txt){
   const box=document.getElementById('ask');
@@ -1327,6 +1358,15 @@ function tryChipMatch(txt){
 function freeAsk(txt){
   if(!txt.trim())return;
   document.getElementById('chat-in').value='';
+  const nt=(txt||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();
+  if(isConfusion(nt)){
+    const h=ctxHelp();
+    if(h){
+      meSay(txt);
+      vicSay(h,()=>{ const a=document.getElementById('ask'); if(a){ stream().appendChild(a); scrollEnd(); } });
+      return;
+    }
+  }
   if(tryChipMatch(txt))return;
   meSay(txt);
   vicSay(vicBrain(txt),()=>{
