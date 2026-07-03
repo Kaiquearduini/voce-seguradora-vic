@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="vic-build" content="v2.6">
+<meta name="vic-build" content="v2.12">
 <title>Vic — Contrate seu seguro por conversa | Você Seguradora</title>
 <meta name="description" content="Converse com a Vic, a assistente da Você Seguradora, e contrate seu seguro residencial em minutos. Simples, seguro e 100% digital.">
 <meta name="theme-color" content="#001a23">
@@ -38,33 +38,33 @@ img{display:block;max-width:100%}
 
 /* ============ TELA 1 — BOAS-VINDAS ============ */
 .welcome{position:relative;z-index:1;min-height:100dvh;display:flex;flex-direction:column}
-.w-top{display:flex;align-items:center;justify-content:space-between;padding:10px clamp(18px,4vw,44px) 4px}
+.w-top{display:flex;align-items:center;justify-content:space-between;padding:clamp(10px,1.4vw,20px) clamp(18px,4vw,52px) 4px}
 .brand{display:flex;align-items:center;gap:11px;text-decoration:none;color:var(--navy)}
 .brand .mk{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,var(--teal),#0a4b46);display:flex;align-items:center;justify-content:center;box-shadow:0 8px 20px rgba(39,153,137,.30)}
 .brand .mk svg{width:22px;height:22px}
 .brand b{font-weight:900;letter-spacing:.04em;font-size:15px;line-height:1.05}
 .brand b span{color:var(--teal)}
 .w-links{display:flex;gap:10px}
-.w-links a{color:var(--txt2);text-decoration:none;font-size:13px;font-weight:600;padding:9px 14px;border-radius:999px;border:1px solid var(--line);background:#fff;transition:all .18s}
+.w-links a{color:var(--txt2);text-decoration:none;font-size:clamp(13px,1vw,14.5px);font-weight:600;padding:clamp(9px,.9vw,12px) clamp(14px,1.3vw,20px);border-radius:999px;border:1px solid var(--line);background:#fff;transition:all .18s}
 .w-links a:hover{color:var(--navy);border-color:var(--line2)}
-.w-hero{flex:1;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:22px;align-items:center;max-width:1180px;margin:0 auto;padding:2px clamp(18px,4vw,44px) 6px;width:100%;min-height:0}
-.wh-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--teal2);background:var(--mint);border:1px solid var(--line2);border-radius:999px;padding:6px 13px;margin-bottom:9px}
+.w-hero{flex:1;display:grid;grid-template-columns:minmax(0,1.04fr) minmax(0,.96fr);gap:clamp(24px,4vw,64px);align-items:center;max-width:1420px;margin:0 auto;padding:2px clamp(18px,4vw,52px) 8px;width:100%;min-height:0}
+.wh-eyebrow{display:inline-flex;align-items:center;gap:9px;font-size:clamp(11px,.85vw,12.5px);font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--teal2);background:var(--mint);border:1px solid var(--line2);border-radius:999px;padding:8px 16px;margin-bottom:12px}
 .wh-eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--neon);animation:vpulse 1.6s infinite}
 @keyframes vpulse{0%{box-shadow:0 0 0 0 rgba(70,239,128,.5)}70%{box-shadow:0 0 0 8px rgba(70,239,128,0)}100%{box-shadow:0 0 0 0 rgba(70,239,128,0)}}
-.wh-h1{font-size:clamp(23px,min(3.4vw,4.6vh),38px);font-weight:900;line-height:1.06;letter-spacing:-.02em;margin-bottom:8px;color:var(--navy)}
+.wh-h1{font-size:clamp(24px,min(3.9vw,5.8vh),54px);font-weight:900;line-height:1.05;letter-spacing:-.02em;margin-bottom:10px;color:var(--navy)}
 .wh-h1 em{font-style:normal;color:var(--teal)}
-.wh-sub{font-size:clamp(13px,min(1.35vw,1.9vh),15px);color:var(--txt2);line-height:1.55;max-width:520px;margin-bottom:12px}
-.wh-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:14px;box-shadow:var(--sh)}
-.wh-card-h{font-size:15.5px;font-weight:800;margin-bottom:2px;text-align:center;color:var(--navy)}
-.wh-card-s{font-size:12.5px;color:var(--txt2);text-align:center;margin-bottom:10px}
-.seg-grid{display:grid;grid-template-columns:1fr;gap:8px}
-.segc{position:relative;display:flex;align-items:center;gap:13px;text-align:left;background:#fff;border:1.5px solid var(--line);border-radius:15px;padding:11px 14px;overflow:hidden;transition:border-color .18s,transform .18s,box-shadow .18s}
+.wh-sub{font-size:clamp(13.5px,min(1.5vw,2.2vh),17.5px);color:var(--txt2);line-height:1.6;max-width:580px;margin-bottom:16px}
+.wh-card{background:#fff;border:1px solid var(--line);border-radius:clamp(20px,1.6vw,26px);padding:clamp(14px,1.5vw,24px);box-shadow:0 30px 70px rgba(0,10,14,.35)}
+.wh-card-h{font-size:clamp(15.5px,1.3vw,19px);font-weight:800;margin-bottom:3px;text-align:center;color:var(--navy)}
+.wh-card-s{font-size:clamp(12.5px,1vw,14.5px);color:var(--txt2);text-align:center;margin-bottom:clamp(10px,1.2vw,16px)}
+.seg-grid{display:grid;grid-template-columns:1fr;gap:clamp(8px,.9vw,12px)}
+.segc{position:relative;display:flex;align-items:center;gap:clamp(13px,1.1vw,16px);text-align:left;background:#fff;border:1.5px solid var(--line);border-radius:clamp(15px,1.2vw,18px);padding:clamp(11px,1.1vw,16px) clamp(14px,1.2vw,18px);overflow:hidden;transition:border-color .18s,transform .18s,box-shadow .18s}
 .segc:hover:not(.off){border-color:var(--neon);box-shadow:0 12px 30px rgba(39,153,137,.14);transform:translateY(-2px)}
-.segc .ic{width:42px;height:42px;border-radius:13px;background:linear-gradient(135deg,rgba(70,239,128,.15),rgba(39,153,137,.12));border:1px solid var(--line2);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.segc .ic svg{width:24px;height:24px;color:var(--teal)}
-.segc .tx b{display:block;font-size:14.5px;font-weight:800;color:var(--navy)}
-.segc .tx span{font-size:12.5px;color:var(--txt2)}
-.segc .go{margin-left:auto;display:flex;align-items:center;gap:6px;color:var(--teal);font-size:13px;font-weight:800;flex-shrink:0}
+.segc .ic{width:clamp(42px,3.4vw,50px);height:clamp(42px,3.4vw,50px);border-radius:14px;background:linear-gradient(135deg,rgba(70,239,128,.15),rgba(39,153,137,.12));border:1px solid var(--line2);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.segc .ic svg{width:clamp(24px,1.9vw,28px);height:clamp(24px,1.9vw,28px);color:var(--teal)}
+.segc .tx b{display:block;font-size:clamp(14.5px,1.2vw,17px);font-weight:800;color:var(--navy)}
+.segc .tx span{font-size:clamp(12.5px,1vw,14px);color:var(--txt2)}
+.segc .go{margin-left:auto;display:flex;align-items:center;gap:6px;color:var(--teal);font-size:clamp(13px,1.05vw,15px);font-weight:800;flex-shrink:0}
 .segc .go svg{width:16px;height:16px;transition:transform .18s}
 .segc:hover:not(.off) .go svg{transform:translateX(3px)}
 .segc.off{opacity:.55;cursor:default}
@@ -79,26 +79,28 @@ img{display:block;max-width:100%}
 .segc.hot .go svg{animation:segArrow 1.3s ease-in-out infinite}
 @keyframes segArrow{0%,100%{transform:translateX(0)}50%{transform:translateX(5px)}}
 .segc .soon{margin-left:auto;font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--txt2);border:1px solid var(--line);border-radius:999px;padding:5px 10px;flex-shrink:0}
-.wh-trust{display:flex;flex-wrap:wrap;gap:5px 16px;justify-content:center;margin-top:9px;font-size:11.5px;color:var(--txt2)}
+.wh-trust{display:flex;flex-wrap:wrap;gap:6px 18px;justify-content:center;margin-top:clamp(9px,1vw,13px);font-size:clamp(11.5px,.95vw,13px);color:var(--txt2)}
 .wh-trust span{display:inline-flex;align-items:center;gap:6px}
 .wh-trust svg{width:14px;height:14px;color:var(--teal)}
 .w-vic{position:relative;display:flex;align-items:flex-end;justify-content:center;min-height:0}
-.w-vic img{height:clamp(260px,55vh,500px);filter:drop-shadow(0 26px 50px rgba(0,36,48,.22));animation:vfloat 5s ease-in-out infinite}
+.w-vic img{height:clamp(300px,70vh,760px);filter:drop-shadow(0 26px 50px rgba(0,36,48,.22));animation:vfloat 5s ease-in-out infinite}
 @keyframes vfloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-.w-vic .halo{position:absolute;bottom:-40px;left:50%;transform:translateX(-50%);width:420px;height:120px;background:radial-gradient(closest-side,rgba(39,153,137,.20),transparent);filter:blur(8px)}
-.vic-tag{position:absolute;top:12%;right:4%;background:#fff;border:1px solid var(--line2);border-radius:16px;padding:12px 16px;box-shadow:var(--sh);animation:tagIn .7s .45s both}
+.w-vic .halo{position:absolute;bottom:-40px;left:50%;transform:translateX(-50%);width:min(520px,90%);height:140px;background:radial-gradient(closest-side,rgba(39,153,137,.20),transparent);filter:blur(8px)}
+.vic-tag{position:absolute;top:9%;right:0;background:#fff;border:1px solid var(--line2);border-radius:18px;padding:clamp(12px,1.1vw,16px) clamp(16px,1.4vw,22px);box-shadow:0 22px 50px rgba(0,10,14,.4);animation:tagIn .7s .45s both}
 @keyframes tagIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-.vic-tag b{display:block;font-size:14px;color:var(--navy)}
-.vic-tag span{font-size:11.5px;color:var(--txt2)}
-.w-feats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:1180px;margin:0 auto;width:100%;padding:0 clamp(18px,4vw,44px) 12px;flex-shrink:0}
-.wf{background:#fff;border:1px solid var(--line);border-radius:14px;padding:9px 13px;text-align:left;box-shadow:0 8px 22px rgba(0,36,48,.05);display:flex;align-items:center;gap:10px}
-.wf svg{width:19px;height:19px;color:var(--teal);margin:0;flex-shrink:0}
-.wf b{display:block;font-size:12.5px;font-weight:800;color:var(--navy);line-height:1.2}
-.wf span{font-size:11px;color:var(--txt2);line-height:1.2}
+.vic-tag b{display:block;font-size:clamp(14px,1.15vw,17px);color:var(--navy)}
+.vic-tag span{font-size:clamp(11.5px,.95vw,13.5px);color:var(--txt2)}
+.w-feats{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,1.2vw,18px);max-width:1420px;margin:0 auto;width:100%;padding:0 clamp(18px,4vw,52px) clamp(14px,1.6vw,24px);flex-shrink:0}
+.wf{background:#fff;border:1px solid var(--line);border-radius:clamp(14px,1.2vw,18px);padding:clamp(11px,1.2vw,16px) clamp(14px,1.4vw,20px);text-align:left;box-shadow:0 8px 22px rgba(0,36,48,.05);display:flex;align-items:center;gap:clamp(11px,1.1vw,15px)}
+.wf .wfic{width:clamp(36px,3vw,46px);height:clamp(36px,3vw,46px);border-radius:13px;background:linear-gradient(135deg,rgba(70,239,128,.15),rgba(39,153,137,.12));border:1px solid var(--line2);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.wf svg{width:clamp(18px,1.5vw,23px);height:clamp(18px,1.5vw,23px);color:var(--teal);margin:0;flex-shrink:0}
+.wf .wtx{display:flex;flex-direction:column;gap:2px;min-width:0}
+.wf b{display:block;font-size:clamp(12.5px,1.05vw,15px);font-weight:800;color:var(--navy);line-height:1.25}
+.wf span{font-size:clamp(11px,.9vw,13px);color:var(--txt2);line-height:1.35}
 @media(max-width:960px){
   .w-hero{grid-template-columns:1fr;padding-bottom:20px}
   .w-vic{order:-1;min-height:0;margin-top:-8px}
-  .w-vic img{height:min(34vh,280px)}
+  .w-vic img{height:min(36vh,300px)}
   .vic-tag{display:none}
   .w-feats{grid-template-columns:1fr;padding-bottom:30px}
 }
@@ -106,7 +108,7 @@ img{display:block;max-width:100%}
 /* Desktop: boas-vindas ocupa exatamente 1 tela (sem rolagem) */
 @media(min-width:961px) and (min-height:600px){
   .welcome{height:100dvh;overflow:hidden}
-  .w-vic img{height:clamp(240px,52vh,480px)}
+  .w-vic img{height:clamp(280px,68vh,740px)}
 }
 
 /* ============ TELA 2 — CHAT ============ */
@@ -282,7 +284,9 @@ img{display:block;max-width:100%}
 .welcome .wh-trust svg{color:var(--neon)}
 .welcome .w-vic img{filter:drop-shadow(0 30px 60px rgba(0,0,0,.45))}
 .welcome .w-vic .halo{background:radial-gradient(closest-side,rgba(70,239,128,.20),transparent)}
-.welcome .wf{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.14);box-shadow:none}
+.welcome .wf{background:rgba(255,255,255,.055);border-color:rgba(255,255,255,.13);box-shadow:0 14px 34px rgba(0,0,0,.22);backdrop-filter:blur(6px)}
+.welcome .wf .wfic{background:rgba(70,239,128,.10);border-color:rgba(70,239,128,.30)}
+.welcome .wf svg{color:var(--neon)}
 .welcome .wf b{color:#fff}
 .welcome .wf span{color:#b9d4d2}
 .welcome .wf svg{color:var(--neon)}
@@ -355,7 +359,7 @@ img{display:block;max-width:100%}
   </div>
   <div class="w-hero">
     <div>
-      <span class="wh-eyebrow"><span class="dot"></span>Vic · Assistente virtual online</span>
+      <span class="wh-eyebrow"><span class="dot"></span>Vic está online · te atende agora</span>
       <h1 class="wh-h1">Contrate seu seguro <em>conversando</em> com a Vic</h1>
       <p class="wh-sub">Sem formulários intermináveis. A Vic te guia por uma conversa rápida, tira suas dúvidas na hora e você contrata em minutos — 100% digital e seguro.</p>
       <div class="wh-card">
@@ -392,9 +396,9 @@ img{display:block;max-width:100%}
     </div>
   </div>
   <div class="w-feats">
-    <div class="wf"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h6l-1 8 9-12h-6z"/></svg><b>Cotação em minutos</b><span>Conversa rápida, preço na hora</span></div>
-    <div class="wf"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8-7 9-4-1-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg><b>100% seguro</b><span>Dados criptografados · LGPD</span></div>
-    <div class="wf"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="0.5" fill="currentColor"/></svg><b>Preço transparente</b><span>IOF detalhado antes de confirmar</span></div>
+    <div class="wf"><span class="wfic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h6l-1 8 9-12h-6z"/></svg></span><span class="wtx"><b>Preço em minutos</b><span>Sem cadastro e sem compromisso</span></span></div>
+    <div class="wf"><span class="wfic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M9 20v-6h6v6"/></svg></span><span class="wtx"><b>Proteção completa</b><span>Mais de 20 coberturas para sua casa</span></span></div>
+    <div class="wf"><span class="wfic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 00-5.4 5.4L4 17v3h3l5.3-5.3a4 4 0 005.4-5.4l-2.5 2.5-2-2 2.5-2.5z"/></svg></span><span class="wtx"><b>Assistência 24 horas</b><span>Chaveiro, encanador e eletricista no seu plano</span></span></div>
   </div>
 </section>
 
