@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,interactive-widget=resizes-content">
-<meta name="vic-build" content="v2.24">
+<meta name="vic-build" content="v2.25">
 <title>Vic — Contrate seu seguro por conversa | Você Seguradora</title>
 <meta name="description" content="Converse com a Vic, a assistente da Você Seguradora, e contrate seu seguro residencial em minutos. Simples, seguro e 100% digital.">
 <meta name="theme-color" content="#001a23">
@@ -502,19 +502,19 @@ const RES={
     {v:'padrao',n:'Padrão',s:'Participação base do produto',fator:1.00,rec:true,ic:'check'},
     {v:'agravada',n:'Participação maior',s:'Preço menor na mensalidade',fator:0.95,ic:'down'}],
   assist:[
-    {v:'essencial',n:'Essencial',ic:'wrench',preco:9.90,s:'O básico bem-feito do dia a dia',det:['Chaveiro','Encanador','Eletricista','Desentupimento','Vidraceiro','Help desk']},
-    {v:'protecao',n:'Proteção',ic:'tools',preco:16.90,s:'Mais serviços para a casa toda',det:['Todos os serviços do Essencial','Linha branca e marrom','Instalação de luminárias/tomadas','Olho mágico','Serviços gerais','Verificação de vazamentos']},
-    {v:'conforto',n:'Conforto+',ic:'star',preco:24.90,s:'A experiência completa',rec:true,det:['Todos os serviços do Proteção','Limpeza de ar-condicionado','Caçamba','Suporte de TV','Instalação de telas','Descarte inteligente']}],
+    {v:'essencial',n:'Home Essencial',ic:'wrench',preco:9.90,s:'O básico bem-feito do dia a dia',det:['Chaveiro','Encanador','Eletricista','Desentupimento','Vidraceiro','Help desk']},
+    {v:'protecao',n:'Home +Select',ic:'tools',preco:16.90,s:'Mais serviços para a casa toda',det:['Todos os serviços do Home Essencial','Linha branca e marrom','Instalação de luminárias/tomadas','Olho mágico','Serviços gerais','Verificação de vazamentos']},
+    {v:'conforto',n:'Home Signature+',ic:'star',preco:24.90,s:'A experiência completa',rec:true,det:['Todos os serviços do Home +Select','Limpeza de ar-condicionado','Caçamba','Suporte de TV','Instalação de telas','Descarte inteligente']}],
   pet:[
     {v:'',n:'Sem assistência pet',ic:'x',preco:0,s:'Você pode adicionar depois'},
-    {v:'pet_sossego',n:'Pet Sossego',ic:'paw',preco:12.90,s:'O essencial para emergências',det:['Telemedicina veterinária','Atendimento de urgência','Transporte do pet','Assistência funeral','Hospedagem em viagem']},
-    {v:'pet_conforto',n:'Pet Conforto',ic:'paw',preco:19.90,s:'Cuidado no dia a dia',det:['Tudo do Pet Sossego','Consulta eletiva','Concierge pet','Aplicação de vacinas','Exames laboratoriais']},
-    {v:'pet_total',n:'Pet Total',ic:'paw',preco:29.90,s:'Cobertura máxima',det:['Tudo do Pet Conforto','Exames de imagem (raio-X e ultrassom)']}]
+    {v:'pet_sossego',n:'Pet Tranquilo',ic:'paw',preco:12.90,s:'O essencial para emergências',det:['Telemedicina veterinária','Atendimento de urgência','Transporte do pet','Assistência funeral','Hospedagem em viagem']},
+    {v:'pet_conforto',n:'Pet Relax',ic:'paw',preco:19.90,s:'Cuidado no dia a dia',det:['Tudo do Pet Tranquilo','Consulta eletiva','Concierge pet','Aplicação de vacinas','Exames laboratoriais']},
+    {v:'pet_total',n:'Pet Mimado',ic:'paw',preco:29.90,s:'Cobertura máxima',det:['Tudo do Pet Relax','Exames de imagem (raio-X e ultrassom)']}]
 };
 const PACOTES=[
-  {v:'basico',n:'Essencial',ic:'shield',cobs:[2,3,4,5],s:'Incêndio, vendaval, danos elétricos, alagamento e tubulações',det:['Incêndio, raio, explosão e fumaça','Vendaval, granizo e furacão','Danos elétricos','Alagamento e inundação','Ruptura de tubulações']},
-  {v:'intermediario',n:'Intermediário',ic:'shieldck',cobs:[2,3,4,5,9,11],s:'Tudo do Essencial + roubo com arrombamento e RC Familiar',rec:true,det:['Todas as coberturas do Essencial','Roubo e subtração com arrombamento','Responsabilidade Civil Familiar']},
-  {v:'completo',n:'Ampliada',ic:'star',cobs:[2,3,4,5,6,7,8,9,10,11,12,14,15,18],s:'Tudo do Intermediário + vidros, bicicletas, danos morais e mais',det:['Todas as coberturas do Intermediário','Quebra de vidros e impacto de veículos','Roubo de bicicletas','RC danos morais','Despesas extraordinárias e desmoronamento']}];
+  {v:'basico',n:'Você Essence',ic:'shield',cobs:[2,3,4,5],s:'Incêndio, vendaval, danos elétricos, alagamento e tubulações',det:['Incêndio, raio, explosão e fumaça','Vendaval, granizo e furacão','Danos elétricos','Alagamento e inundação','Ruptura de tubulações']},
+  {v:'intermediario',n:'Você Gold',ic:'shieldck',cobs:[2,3,4,5,9,11],s:'Tudo do Você Essence + roubo com arrombamento e RC Familiar',rec:true,det:['Todas as coberturas do Você Essence','Roubo e subtração com arrombamento','Responsabilidade Civil Familiar']},
+  {v:'completo',n:'Você Prime',ic:'star',cobs:[2,3,4,5,6,7,8,9,10,11,12,14,15,18],s:'Tudo do Você Gold + vidros, bicicletas, danos morais e mais',det:['Todas as coberturas do Você Gold','Quebra de vidros e impacto de veículos','Roubo de bicicletas','RC danos morais','Despesas extraordinárias e desmoronamento']}];
 
 /* Estado da conversa */
 let V={};
@@ -1247,7 +1247,7 @@ const KB=[
   {k:/veraneio|moradia habitual|casa de praia|casa de campo|segunda residencia|temporada/,a:'<b>Moradia habitual</b> é onde você vive no dia a dia. <b>Veraneio</b> é a casa de praia/campo usada em férias e fins de semana — uma segunda residência. 🏖️ Dá pra segurar as duas! Só é importante responder certinho porque o tempo que o imóvel fica vazio muda o risco (e o preço é calibrado por isso).'},
   {k:/inversor/,a:'O <b>inversor</b> é o aparelho que converte a energia das placas solares para a energia que a casa usa. ⚡ No seguro, informar que você tem sistema solar garante que <b>placas e inversor</b> entrem na proteção de <b>danos elétricos</b> — por isso eu pergunto!'},
   {k:/acion|se acontecer algo|abrir sinistro|comunicar sinistro|avisar o seguro|acidente o que faco/,a:'Se acontecer algo, é simples: você <b>aciona o sinistro pela área do cliente</b> (site ou app) ou pelo nosso WhatsApp, a qualquer hora. 📋 A gente orienta os documentos, analisa e acompanha tudo com você até a solução. Dica: fotos e notas fiscais do prejuízo ajudam a agilizar muito!'},
-  {k:/linha branca|linha marrom/,a:'<b>Linha branca</b> são os eletrodomésticos grandes — geladeira, fogão, máquina de lavar, micro-ondas. <b>Linha marrom</b> são os de som e imagem — TV, home theater. 📺 Nos planos <b>Proteção</b> e <b>Conforto+</b> da assistência, você tem mão de obra para pequenos reparos desses aparelhos, conforme as condições do plano.'},
+  {k:/linha branca|linha marrom/,a:'<b>Linha branca</b> são os eletrodomésticos grandes — geladeira, fogão, máquina de lavar, micro-ondas. <b>Linha marrom</b> são os de som e imagem — TV, home theater. 📺 Nos planos <b>Home +Select</b> e <b>Home Signature+</b> da assistência, você tem mão de obra para pequenos reparos desses aparelhos, conforme as condições do plano.'},
   {k:/quantos pets|mais de um pet|dois pets|varios pets|dois cachorros|dois gatos/,a:'A assistência pet atende os bichinhos da residência conforme as regras do plano — a quantidade, espécies e carências detalhadas estão nas <b>Condições Gerais</b>. 🐾 Tem mais de um pet? Nosso time confirma o seu caso direitinho pelo WhatsApp, e você pode seguir a cotação normalmente por aqui!'},
   {k:/imposto|tributo|taxa do governo/,a:'O <b>IOF</b> é um imposto federal de <b>7,38%</b> que incide sobre todo seguro no Brasil — não é taxa nossa, é lei, e vale para qualquer seguradora. 🧾 A nossa diferença é a transparência: eu mostro o valor do seguro e o IOF <b>separadinhos</b> antes de você confirmar. Sem surpresa no preço.'},
   {k:/meu cpf|precisa do cpf|pedir cpf|pra que o cpf|por que o cpf|pq o cpf/,a:'Seu <b>CPF</b> serve para duas coisas: emitir a proposta em seu nome (exigência de todo seguro) e <b>vincular a contratação à sua conta</b> — com ele, o seguro aparece automaticamente na sua área do cliente no site e no app. 🔒 Tudo conforme a <b>LGPD</b>: usamos só para a proposta, nunca para spam.'},
@@ -1262,26 +1262,26 @@ const KB=[
   /* — Coberturas específicas — */
   {k:/dano(s)? eletrico|curto|sobretensao|queima|eletrodomestico/,a:'A cobertura de <b>Danos Elétricos</b> protege contra curto-circuito, sobretensão e descargas — incluindo <b>equipamentos de energia solar e carregador de carro elétrico (wallbox)</b>. Participação do segurado: 10% dos prejuízos (mín. R$ 700), conforme Condições Gerais. ⚡'},
   {k:/solar|placa|fotovolta|wallbox|carregador/,a:'Sim! Se você tem <b>energia solar</b>, os equipamentos ficam protegidos pela cobertura de <b>Danos Elétricos</b> (inclusive wallbox). Por isso pergunto sobre isso na cotação — o sistema entra no cálculo do risco. ☀️'},
-  {k:/vidro|espelho|marmore|granito/,a:'A cobertura de <b>Quebra de Vidros, Espelhos, Mármores e Granitos</b> está no plano <b>Ampliada</b>. Participação do segurado: 10% dos prejuízos (mín. R$ 150). 🪟'},
-  {k:/bicicleta|bike/,a:'Temos cobertura de <b>Roubo/Furto Qualificado de Bicicletas</b> — incluindo <b>bikes elétricas de até 1.000 W</b>. Ela faz parte do plano Ampliada. 🚲'},
-  {k:/roubo|furto|arrombamento|ladrao|assalto/,a:'A cobertura de <b>Roubo e Subtração de Bens</b> vale para casos <b>com arrombamento</b> e está a partir do plano Intermediário. Dica: proteções como alarme, CFTV e portaria 24h <b>reduzem o preço</b> dessa cobertura! 🔐'},
+  {k:/vidro|espelho|marmore|granito/,a:'A cobertura de <b>Quebra de Vidros, Espelhos, Mármores e Granitos</b> está no plano <b>Você Prime</b>. Participação do segurado: 10% dos prejuízos (mín. R$ 150). 🪟'},
+  {k:/bicicleta|bike/,a:'Temos cobertura de <b>Roubo/Furto Qualificado de Bicicletas</b> — incluindo <b>bikes elétricas de até 1.000 W</b>. Ela faz parte do plano Você Prime. 🚲'},
+  {k:/roubo|furto|arrombamento|ladrao|assalto/,a:'A cobertura de <b>Roubo e Subtração de Bens</b> vale para casos <b>com arrombamento</b> e está a partir do plano Você Gold. Dica: proteções como alarme, CFTV e portaria 24h <b>reduzem o preço</b> dessa cobertura! 🔐'},
   {k:/alag|inund|enchente/,a:'A cobertura de <b>Alagamento e Inundação</b> está em todos os nossos planos. Participação do segurado: 15% dos prejuízos (mín. R$ 1.000), conforme Condições Gerais. 🌊'},
   {k:/vendaval|granizo|tornado|furacao|tempestade|ciclone|vento/,a:'A cobertura de <b>Vendaval, Granizo, Furacão e Tornado</b> (ventos a partir de 54 km/h) está em todos os planos. Participação do segurado: 10% dos prejuízos (mín. R$ 600). 🌪️'},
   {k:/tubulacao|vazamento|cano|encanamento|ruptura|tanque/,a:'A cobertura de <b>Ruptura de Tanques e Tubulações</b> está em todos os planos (participação de 15%, mín. R$ 500). E se o vazamento gerar <b>excesso na conta de água</b>, há cobertura específica para o valor excedente. 🚰'},
   {k:/conta de agua/,a:'Sim! A cobertura de <b>Excesso de Conta de Água</b> reembolsa o valor <b>excedente</b> da conta causado por um vazamento coberto (com sublimite nas Condições Gerais). 💧'},
   {k:/impacto de veiculo|carro bateu|bateu no muro/,a:'A cobertura de <b>Impacto de Veículos</b> protege quando um veículo <b>de terceiros</b> atinge o seu imóvel. Participação do segurado: 10% (mín. R$ 300). 🚗'},
   {k:/incendio|fogo|raio|explosao|fumaca|aeronave/,a:'A <b>Cobertura Básica</b> — presente em todos os planos — protege contra <b>Incêndio, Raio, Explosão, Fumaça e Queda de Aeronaves</b>. É o coração do seguro residencial. 🔥'},
-  {k:/responsabilidade civil|\brc\b|terceiro|vizinho/,a:'A <b>Responsabilidade Civil Familiar</b> (a partir do plano Intermediário) cobre danos involuntários que você ou sua família causem a terceiros — como um vazamento que atinge o vizinho. No Ampliada, soma-se a cobertura de <b>Danos Morais</b>. 🤝'},
-  {k:/danos? mora(l|is)/,a:'A cobertura de <b>RC — Danos Morais</b> está no plano Ampliada e complementa a Responsabilidade Civil Familiar em condenações dessa natureza. ⚖️'},
-  {k:/empregad|domestic|diarista/,a:'Temos a cobertura de <b>RC — Empregador Doméstico</b>, que protege em caso de morte ou invalidez do empregado doméstico em serviço. Ela integra o plano Ampliada. 🏠'},
+  {k:/responsabilidade civil|\brc\b|terceiro|vizinho/,a:'A <b>Responsabilidade Civil Familiar</b> (a partir do plano Você Gold) cobre danos involuntários que você ou sua família causem a terceiros — como um vazamento que atinge o vizinho. No Você Prime, soma-se a cobertura de <b>Danos Morais</b>. 🤝'},
+  {k:/danos? mora(l|is)/,a:'A cobertura de <b>RC — Danos Morais</b> está no plano Você Prime e complementa a Responsabilidade Civil Familiar em condenações dessa natureza. ⚖️'},
+  {k:/empregad|domestic|diarista/,a:'Temos a cobertura de <b>RC — Empregador Doméstico</b>, que protege em caso de morte ou invalidez do empregado doméstico em serviço. Ela integra o plano Você Prime. 🏠'},
   {k:/aluguel|inabitavel|morar fora|hotel/,a:'Se um sinistro coberto deixar o imóvel <b>inabitável</b>, a cobertura de <b>Despesas com Aluguel</b> ajuda com a moradia por <b>até 6 meses</b> — e inclui proteção em situações de violência doméstica contra a mulher. 🏡'},
-  {k:/desmoronamento|desabou|rachadura|laje|coluna|viga/,a:'A cobertura de <b>Desmoronamento</b> protege contra queda de parede, coluna, viga ou laje, e está no plano Ampliada. Rachaduras sem desmoronamento seguem as Condições Gerais. 🧱'},
+  {k:/desmoronamento|desabou|rachadura|laje|coluna|viga/,a:'A cobertura de <b>Desmoronamento</b> protege contra queda de parede, coluna, viga ou laje, e está no plano Você Prime. Rachaduras sem desmoronamento seguem as Condições Gerais. 🧱'},
   {k:/home office|trabalh(o|ar) em casa|atividade profissional|atelie|escritorio em casa/,a:'Sim! A cobertura de <b>Atividades Profissionais</b> protege quem trabalha em casa em atividades como escritório, confeitaria, costura, fotografia, cabeleireiro, manicure, fisioterapia e outras da lista das Condições Gerais. 💼'},
-  {k:/\bvida\b|falecimento|funeral/,a:'O plano Ampliada inclui <b>Vida Individual</b> (morte natural ou acidental do segurado principal) e <b>Reembolso de Funeral Familiar</b> para até 5 pessoas. E também temos o produto <b>Vida e AP Individual</b> separado, se quiser conhecer! 💚'},
+  {k:/\bvida\b|falecimento|funeral/,a:'O plano Você Prime inclui <b>Vida Individual</b> (morte natural ou acidental do segurado principal) e <b>Reembolso de Funeral Familiar</b> para até 5 pessoas. E também temos o produto <b>Vida e AP Individual</b> separado, se quiser conhecer! 💚'},
 
   /* — Pet e assistência — */
-  {k:/\bpet\b|cachorro|gato|animal|veterinari/,a:'Temos assistência <b>pet</b> opcional (não consome o limite do seguro): <b>Sossego</b> (R$ 12,90) com telemedicina, urgência, transporte e funeral pet; <b>Conforto</b> (R$ 19,90) soma consulta eletiva e exames laboratoriais; <b>Total</b> (R$ 29,90) inclui exames de imagem. 🐾'},
-  {k:/assistencia|chaveiro|encanador|eletricista|desentup|vidraceiro|ar.condicionado|cacamba/,a:'A <b>assistência 24h</b> tem 3 planos: <b>Essencial</b> (R$ 9,90 — chaveiro, encanador, eletricista, desentupimento, vidraceiro), <b>Proteção</b> (R$ 16,90 — soma reparo de linha branca, instalação de luminárias/tomadas, verificação de vazamentos) e <b>Conforto+</b> (R$ 24,90 — soma limpeza de ar-condicionado, caçamba, suporte de TV e mais). 🛠️'},
+  {k:/\bpet\b|cachorro|gato|animal|veterinari/,a:'Temos assistência <b>pet</b> opcional (não consome o limite do seguro): <b>Pet Tranquilo</b> (R$ 12,90) com telemedicina, urgência, transporte e funeral pet; <b>Pet Relax</b> (R$ 19,90) soma consulta eletiva e exames laboratoriais; <b>Pet Mimado</b> (R$ 29,90) inclui exames de imagem. 🐾'},
+  {k:/assistencia|home essencial|home .?select|signature|chaveiro|encanador|eletricista|desentup|vidraceiro|ar.condicionado|cacamba/,a:'A <b>assistência 24h</b> tem 3 planos: <b>Home Essencial</b> (R$ 9,90 — chaveiro, encanador, eletricista, desentupimento, vidraceiro), <b>Home +Select</b> (R$ 16,90 — soma reparo de linha branca, instalação de luminárias/tomadas, verificação de vazamentos) e <b>Home Signature+</b> (R$ 24,90 — soma limpeza de ar-condicionado, caçamba, suporte de TV e mais). 🛠️'},
 
   /* — Sinistro, vigência, cancelamento — */
   {k:/sinistro|acionar|indeniza|aconteceu|ocorrencia/,a:'Em caso de <b>sinistro</b>, você aciona pela <b>área do cliente</b> ou pelo nosso time no WhatsApp, envia as informações do ocorrido e acompanha cada etapa da análise online. O regime é <b>Primeiro Risco Absoluto</b>: indenização até o limite contratado, sem rateio. 📋'},
@@ -1317,7 +1317,7 @@ const KB=[
   {k:/lgpd|dados|privacidade|criptograf|seguranca da informacao/,a:'Pode ficar tranquilo(a)! 🔒 Seus dados são <b>criptografados</b>, tratados conforme a <b>LGPD</b> e usados só para a sua cotação. E a simulação é <b>gratuita e sem compromisso</b>.'},
   {k:/nao cobre|exclusao|exclui|fora da cobertura/,a:'Cada cobertura tem riscos excluídos descritos nas <b>Condições Gerais</b> (que você recebe por e-mail) — ex.: má conservação, desgaste natural e atos intencionais. Se tiver um caso específico em mente, me conta ou pergunte ao time: <b><a href="https://wa.me/5511930549424" target="_blank" rel="noopener" style="color:var(--teal)">fale com um especialista</a></b>. 📖'},
   {k:/humano|atendente|pessoa|falar com|whatsapp|telefone|contato/,a:'Claro! Você pode falar com o nosso time agora no WhatsApp: <b><a href="https://wa.me/5511930549424" target="_blank" rel="noopener" style="color:var(--teal)">fale com um especialista</a></b>. E eu continuo por aqui se precisar. 💚'},
-  {k:/cobertura|cobre|plano|protege|incluso/,a:'Nossos planos: <b>Essencial</b> cobre incêndio/raio/explosão, vendaval e granizo, danos elétricos, alagamento e tubulações. O <b>Intermediário</b> soma roubo com arrombamento e RC Familiar. O <b>Ampliada</b> adiciona vidros, bicicletas, danos morais, aluguel, desmoronamento, vida e funeral — 21 coberturas no total. Qual delas quer conhecer melhor? 😊'},
+  {k:/cobertura|cobre|plano|protege|incluso|essence|\bgold\b|\bprime\b/,a:'Nossos planos: <b>Você Essence</b> cobre incêndio/raio/explosão, vendaval e granizo, danos elétricos, alagamento e tubulações. O <b>Você Gold</b> soma roubo com arrombamento e RC Familiar. O <b>Você Prime</b> adiciona vidros, bicicletas, danos morais, aluguel, desmoronamento, vida e funeral — 21 coberturas no total. Qual delas quer conhecer melhor? 😊'},
 ];
 function vicBrain(q){
   const n=q.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
@@ -1343,7 +1343,7 @@ const CTX_HELP={
   qSin:'@o que é sinistro',
   qProt:'São os <b>equipamentos de segurança</b> do imóvel — grades, alarme, câmeras (CFTV), portaria e afins. Cada um reduz o risco, então pode <b>baixar o seu preço</b>! 🛡️ Marca os que existem aí; se não tiver nenhum, toca em "Nenhuma dessas".',
   qLMI:'@como calcular o valor da importancia segurada',
-  simular:'São os <b>3 pacotes de cobertura</b> — cada card mostra exatamente o que fica protegido. O Essencial cobre o básico bem-feito, e cada nível acima soma proteções. Toca no que combina com você (e dá pra ajustar depois, prometo!). ✨',
+  simular:'São os <b>3 pacotes de cobertura</b> — cada card mostra exatamente o que fica protegido. O Você Essence cobre o básico bem-feito, e cada nível acima soma proteções. Toca no que combina com você (e dá pra ajustar depois, prometo!). ✨',
   qAssist:'A <b>assistência 24h</b> são serviços do dia a dia — chaveiro, encanador, eletricista e mais — que você aciona quando precisar. 🔧 Cada card lista o que inclui. É opcional e soma no valor mensal.',
   qPet:'É a <b>assistência veterinária</b> opcional para os pets da casa — telemedicina, urgência, transporte e mais, conforme o plano. 🐾 Se não quiser, é só tocar em "Sem assistência pet".',
   qFranquia:'@o que é franquia',
